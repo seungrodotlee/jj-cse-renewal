@@ -1,0 +1,17 @@
+html,
+body,
+#app {
+  @apply w-full h-full;
+}
+
+html,
+body {
+  font-size: 16px;
+  overflow: hidden;
+}
+
+.flex-center {
+  @apply flex justify-center items-center;
+}
+
+@import "./animations.scss";
