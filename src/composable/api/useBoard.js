@@ -1,6 +1,6 @@
 import useAPI from "./useAPI";
 
-export default useBoard = () => {
+export default function useBoard() {
   const { get } = useAPI().request;
 
   const test = (params) => {
@@ -8,4 +8,4 @@ export default useBoard = () => {
       const result = await get("/board/noticeList", params);
     });
   };
-};
+}

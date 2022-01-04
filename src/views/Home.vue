@@ -1,6 +1,5 @@
 <template>
   <div class="home w-full h-full">
-    <main-header />
     <section class="main-carousel mb-2">
       <img class="w-full object-cover" :src="currentCarousel" />
     </section>

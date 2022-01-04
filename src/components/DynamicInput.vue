@@ -31,6 +31,7 @@
         ></div>
         <input
           v-if="!isTextArea"
+          :type="inputType"
           class="
             w-full
             font-semibold
@@ -98,6 +99,7 @@ export default {
     errorLabel: String,
     disabled: Boolean,
     isSmall: Boolean,
+    inputType: String,
     value: String,
     validator: {
       type: Function,

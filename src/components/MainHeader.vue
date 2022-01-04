@@ -1,7 +1,7 @@
 <template>
-  <div class="w-full border-b border-black">
-    <div class="container mx-auto flex justify-between">
-      <router-link to="/" class="my-4">
+  <div class="fixed w-full h-20 border-b border-black bg-white z-50">
+    <div class="container mx-auto h-full flex justify-between">
+      <router-link to="/" class="flex items-center">
         <img :src="require('/src/assets/img/main-logo.png')" />
       </router-link>
       <div class="nav-menus flex text-sm">

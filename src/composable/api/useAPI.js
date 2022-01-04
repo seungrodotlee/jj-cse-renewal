@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default useAPI = () => {
+export default function useAPI() {
   const domain = "https://jj-cse.online/api";
   const version = "v1";
 
@@ -35,7 +35,7 @@ export default useAPI = () => {
             }
           }
 
-          const response = await axios.post(domain + url, fd, {
+          const response = await axios.post(domain + url, form, {
             withCredentials: true,
             headers: {
               "Content-type": "multipart/form-data",
@@ -53,4 +53,4 @@ export default useAPI = () => {
   return {
     request,
   };
-};
+}

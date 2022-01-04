@@ -1,6 +1,6 @@
 import useAPI from "./useAPI";
 
-export default useAuth = () => {
+export default function useAuth() {
   const { request } = useAPI();
   const { get, post } = request;
 
@@ -11,27 +11,28 @@ export default useAuth = () => {
         "access_token_expires"
       );
 
-      if (savedAccessToken) {
-        if (true) {
-          localStorage.setItem("access_token", result.access_token);
-          localStorage.setItem("access_token_expires", result.expires_in);
+      // if (savedAccessToken) {
+      //   if (true) {
+      //     localStorage.setItem("access_token", result.access_token);
+      //     localStorage.setItem("access_token_expires", result.expires_in);
 
-          resolve(result);
-        } else {
-        }
+      //     resolve(result);
+      //   } else {
+      //   }
 
-        return;
-      }
+      //   return;
+      // }
 
       const result = await post("/login", params);
+
+      console.log(result);
 
       if (result.success) {
         localStorage.setItem("access_token", result.access_token);
         localStorage.setItem("access_token_expires", result.expires_in);
-
-        resolve(result);
-        return;
       }
+
+      resolve(result);
     });
   };
 
@@ -54,4 +55,4 @@ export default useAuth = () => {
     login,
     register,
   };
-};
+}
