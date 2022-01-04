@@ -13,4 +13,9 @@ body {
   @apply flex justify-center items-center;
 }
 
+.carousel__prev,
+.carousel__next {
+  @apply bg-gray-500;
+}
+
 @import "./animations.scss";
