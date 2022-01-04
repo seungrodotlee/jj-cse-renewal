@@ -6,16 +6,16 @@ const resolveSrc = (_path) => {
 
 module.exports = {
   configureWebpack: {
-    devServer: {
-      host: "test.jj-cse.online",
-      port: 443,
-      https: true,
-    },
-    resolve: {
-      alias: {
-        assets: resolveSrc("src/assets"),
-      },
-    },
+    // devServer: {
+    //   host: "test.jj-cse.online",
+    //   port: 443,
+    //   https: true,
+    // },
+    // resolve: {
+    //   alias: {
+    //     assets: resolveSrc("src/assets"),
+    //   },
+    // },
     module: {
       rules: [
         {
