@@ -6,6 +6,7 @@
       :fields="fields"
       :data="items"
       :page="page"
+      @itemSelected="selectItem"
     />
     <pager
       class="self-end mb-4"
@@ -17,7 +18,7 @@
 
 <script>
 import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import DataTable from "@/components/Elements/DataTable.vue";
 import Pager from "@/components/Elements/Pager.vue";
@@ -31,12 +32,9 @@ export default {
   },
   setup() {
     const route = useRoute();
+    const router = useRouter();
 
     const page = computed(() => parseInt(route.params.page));
-
-    const contents = data.content.sort((a, b) => {
-      return b.content_id - a.content_id;
-    });
 
     const fields = ref([
       {
@@ -57,21 +55,21 @@ export default {
       },
     ]);
 
-    const items = contents.map((c) => {
-      return {
-        ...c,
-        user_name: data.user.filter((u) => {
-          return c.user_id === u.user_id;
-        })[0].name,
-      };
-    });
+    const items = data.fetched(data.content, data.user);
 
-    console.log(items);
+    const selectItem = (item) => {
+      console.log(item);
+      router.push({
+        name: "Article",
+        params: { board: "notice", idx: item.content_id },
+      });
+    };
 
     return {
       page,
       fields,
       items,
+      selectItem,
     };
   },
 };

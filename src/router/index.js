@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Notice from "../views/Notice.vue";
+import Article from "../views/Article.vue";
+import JoinEvent from "../views/Event/Join.vue";
 
 const routes = [
   {
@@ -23,6 +25,16 @@ const routes = [
     path: "/notice/:page",
     name: "Notice",
     component: Notice,
+  },
+  {
+    path: "/article/:board/:idx",
+    name: "Article",
+    component: Article,
+  },
+  {
+    path: "/event/join",
+    name: "JoinEvent",
+    component: JoinEvent,
   },
 ];
 

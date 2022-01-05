@@ -8,8 +8,7 @@
         <router-link :to="{ name: 'Notice', params: { page: 1 } }"
           >공지사항</router-link
         >
-        <router-link to="/">학과</router-link>
-        <router-link to="/">이벤트</router-link>
+        <router-link to="/">학과 이벤트</router-link>
         <router-link to="/">커뮤니티</router-link>
         <router-link to="/">FAQ</router-link>
         <router-link v-if="!logined" :to="{ name: 'Login' }"
@@ -40,10 +39,14 @@ export default {
 <style lang="scss" scoped>
 .nav-menus > a,
 .nav-menus > button {
-  @apply flex justify-center items-center mr-4 pb-2 pt-3 border-b-4 border-transparent;
+  @apply flex justify-center items-center mr-6 pb-2 pt-3 border-b-4 border-transparent;
 
   &:hover {
     @apply border-primary;
+  }
+
+  &:last-child {
+    @apply mr-0;
   }
 }
 </style>

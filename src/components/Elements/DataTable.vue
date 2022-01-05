@@ -19,11 +19,11 @@
           "
           v-for="d in displayDatas"
           :key="d.content_id"
+          @click="emit('itemSelected', d)"
         >
-          <td class="px-4 py-2">{{ d.content_id }}</td>
-          <td class="px-4 py-2">{{ d.title }}</td>
-          <td class="px-4 py-2">{{ d.user_name }}</td>
-          <td class="px-4 py-2">{{ d.created_at }}</td>
+          <td v-for="f in fields" :key="f.key" class="px-4 py-2">
+            {{ d[f.key] }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -43,7 +43,8 @@ export default {
       default: 8,
     },
   },
-  setup(props) {
+  emits: ["itemSelected"],
+  setup(props, { emit }) {
     const { data, page, limit } = toRefs(props);
 
     const displayDatas = computed(() => {
@@ -54,6 +55,7 @@ export default {
     });
 
     return {
+      emit,
       displayDatas,
     };
   },

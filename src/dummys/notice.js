@@ -268,7 +268,7 @@ export default {
       updated_at: null,
     },
   ],
-  Comment: [
+  comment: [
     {
       comment_id: 1,
       content_id: 2,
@@ -310,7 +310,7 @@ export default {
       updated_at: null,
     },
   ],
-  SubComment: [
+  subComment: [
     {
       subcomment_id: 1,
       comment_id: 3,
@@ -328,4 +328,20 @@ export default {
       updated_at: null,
     },
   ],
+  fetched(list, users) {
+    const contents = list.sort((a, b) => {
+      return b.content_id - a.content_id;
+    });
+
+    const items = contents.map((c) => {
+      return {
+        ...c,
+        user_name: users.filter((u) => {
+          return c.user_id === u.user_id;
+        })[0].name,
+      };
+    });
+
+    return items;
+  },
 };
