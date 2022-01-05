@@ -1,9 +1,9 @@
 <template>
   <div class="home w-full h-full">
-    <section class="main-carousel mb-2">
+    <section class="main-carousel mb-4">
       <img class="w-full object-cover" :src="currentCarousel" />
     </section>
-    <section class="container mx-auto mb-2 flex">
+    <section class="container mx-auto mb-4 flex">
       <div
         class="
           flex
@@ -67,14 +67,14 @@
         </div>
       </div>
     </section>
-    <section class="slider-section container mx-auto mb-2">
+    <section class="slider-section container mx-auto mb-4">
       <carousel
         :items-to-show="2.5"
         :wrap-around="true"
         :snap-align="'start'"
         class="w-full text-left"
       >
-        <slide v-for="(e, i) in events" :key="i" class="pr-2">
+        <slide v-for="(e, i) in events" :key="i" class="pr-4">
           <div class="flex flex-col px-4 py-4 bg-gray-200 rounded-xl">
             <p
               class="
@@ -107,7 +107,7 @@
         </template>
       </carousel>
     </section>
-    <section class="w-full bg-gray-200 mb-2">
+    <section class="w-full bg-gray-200 mb-4">
       <div class="container mx-auto py-8">
         <p class="text-4xl font-bold mb-8">익명 건의사항</p>
         <div class="flex flex-col">
@@ -122,7 +122,6 @@
             />
             <dynamic-input
               :placeholder="'학년'"
-              :isSmall="true"
               v-model:errored="yearInput.errored"
               :errorLabel="yearInput.errorLabel"
               v-model:value="yearInput.value"
@@ -156,15 +155,6 @@
             </button>
           </div>
         </div>
-      </div>
-    </section>
-    <section class="w-full bg-gray-200">
-      <div class="container mx-auto py-8">
-        <p>[55069] 전라북도 전주시 완산구 천잠로 303 공학1관 208호</p>
-        <p class="mb-16">
-          공과대학 행정실 | TEL: 063-22-2372 | FAX: 063-220-2056
-        </p>
-        <p>Copyrights (C) 2022 전주대학교 컴퓨터공학과</p>
       </div>
     </section>
   </div>

@@ -5,12 +5,16 @@
         <img :src="require('/src/assets/img/main-logo.png')" />
       </router-link>
       <div class="nav-menus flex text-sm">
-        <router-link to="/">공지사항</router-link>
+        <router-link :to="{ name: 'Notice', params: { page: 1 } }"
+          >공지사항</router-link
+        >
         <router-link to="/">학과</router-link>
         <router-link to="/">이벤트</router-link>
         <router-link to="/">커뮤니티</router-link>
         <router-link to="/">FAQ</router-link>
-        <router-link v-if="!logined" to="/">로그인</router-link>
+        <router-link v-if="!logined" :to="{ name: 'Login' }"
+          >로그인</router-link
+        >
         <button v-else @click="logout">로그아웃</button>
         <router-link v-if="logined" to="/">프로필</router-link>
       </div>
