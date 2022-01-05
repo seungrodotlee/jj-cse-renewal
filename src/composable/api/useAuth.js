@@ -1,58 +1,68 @@
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { routerKey, useRouter } from "vue-router";
+
 import useAPI from "./useAPI";
 
 export default function useAuth() {
-  const { request } = useAPI();
-  const { get, post } = request;
+  const router = useRouter();
+  const store = useStore();
+  const { get, post } = useAPI().request;
+
+  const logined = computed(() => store.getters.getUserInfo);
 
   const login = (params) => {
     return new Promise(async (resolve, reject) => {
-      const savedAccessToken = localStorage.getItem("access_token");
-      const savedTokenExpiresDate = localStorage.getItem(
-        "access_token_expires"
-      );
+      const loginedUser = JSON.parse(localStorage.getItem("loginedUser"));
 
-      // if (savedAccessToken) {
-      //   if (true) {
-      //     localStorage.setItem("access_token", result.access_token);
-      //     localStorage.setItem("access_token_expires", result.expires_in);
-
-      //     resolve(result);
-      //   } else {
-      //   }
-
-      //   return;
-      // }
+      if (loginedUser) {
+        store.commit("setUserInfo", loginedUser);
+        resolve({
+          state: true,
+          data: loginedUser,
+        });
+        return;
+      }
 
       const result = await post("/login", params);
 
       console.log(result);
 
-      if (result.success) {
-        localStorage.setItem("access_token", result.access_token);
-        localStorage.setItem("access_token_expires", result.expires_in);
+      if (result.state) {
+        localStorage.setItem("loginedUser", JSON.stringify(result.data));
+        store.commit("setUserInfo", result.data);
       }
 
       resolve(result);
     });
   };
 
+  const logout = (params) => {
+    localStorage.removeItem("loginedUser");
+    store.commit("setUserInfo", null);
+    router.push({ name: "Home" });
+  };
+
   const register = (params) => {
     return new Promise(async (resolve, reject) => {
       const result = await post("/register", params);
+      console.log(result);
 
-      if (result.loginCnt > 0) {
-        reject({
-          count: result.loginCnt,
-        });
+      if (result.cnt > 0) {
+        resolve(result);
+        return;
       } else {
         const loginResult = await login(params);
         resolve(loginResult);
+        return;
       }
     });
   };
 
   return {
+    logined,
     login,
+    logout,
     register,
   };
 }

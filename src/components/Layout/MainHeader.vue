@@ -10,19 +10,32 @@
         <router-link to="/">이벤트</router-link>
         <router-link to="/">커뮤니티</router-link>
         <router-link to="/">FAQ</router-link>
-        <router-link to="/">로그인</router-link>
-        <router-link to="/">프로필</router-link>
+        <router-link v-if="!logined" to="/">로그인</router-link>
+        <button v-else @click="logout">로그아웃</button>
+        <router-link v-if="logined" to="/">프로필</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import useAuth from "@/composable/api/useAuth";
+
+export default {
+  setup() {
+    const { logined, logout } = useAuth();
+
+    return {
+      logined,
+      logout,
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-.nav-menus > a {
+.nav-menus > a,
+.nav-menus > button {
   @apply flex justify-center items-center mr-4 pb-2 pt-3 border-b-4 border-transparent;
 
   &:hover {

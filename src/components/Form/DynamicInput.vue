@@ -5,7 +5,7 @@
         class="relative flex-grow rounded-xl transition duration-500"
         :class="[
           inputDynamicStyles,
-          isSmall ? 'px-6 py-6' : 'px-10 py-6',
+          isSmall ? 'px-6 py-4' : 'px-10 py-6',
           borderless ? '' : 'border',
         ]"
       >
@@ -13,7 +13,8 @@
           class="
             placeholder
             absolute
-            top-6
+            bg-white
+            px-2
             origin-left
             transition-transform
             duration-500
@@ -23,9 +24,10 @@
           "
           :class="[
             isFocused || valueBind.length > 0
-              ? 'transform -translate-y-4 scale-75'
+              ? `transform -translate-y-${isSmall ? 7 : 4} scale-75`
               : '',
             lastCharEmphasized ? 'emphasized' : '',
+            isSmall ? ' transformtop-4 -translate-x-2' : 'top-6',
           ]"
           v-html="placeholder"
         ></div>
@@ -115,6 +117,7 @@ export default {
     },
     borderless: Boolean,
     focused: Boolean,
+    isSmall: Boolean,
   },
   setup(props, { emit }) {
     const { disabled, errored, value, validator } = toRefs(props);

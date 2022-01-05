@@ -38,7 +38,42 @@
       v-if="showRegistryPopup"
       :title="'전주대학교 계정 연동'"
       @close="router.push({ name: 'Login' })"
-    ></popup>
+    >
+      <template #content>
+        <div class="flex flex-col">
+          <dynamic-input
+            class="flex-grow mb-4"
+            :isSmall="true"
+            :placeholder="'학번'"
+            v-model:errored="idInputReg.errored"
+            :errorLabel="idInputReg.errorLabel"
+            v-model:value="idInputReg.value"
+            :validator="idInputReg.validator"
+          />
+          <dynamic-input
+            class="flex-grow mb-4"
+            :isSmall="true"
+            :placeholder="'비밀번호'"
+            :inputType="'password'"
+            v-model:errored="passwordInputReg.errored"
+            :errorLabel="passwordInputReg.errorLabel"
+            v-model:value="passwordInputReg.value"
+            :validator="passwordInputReg.validator"
+          />
+          <check-box
+            class="mb-4"
+            :label="'개인정보 활용 동의'"
+            v-model:checked="privacyChecked"
+          />
+          <button
+            class="py-4 text-xl rounded-xl font-bold bg-primary text-white"
+            @click="tryRegistry"
+          >
+            연동하기
+          </button>
+        </div>
+      </template>
+    </popup>
   </div>
 </template>
 
@@ -47,56 +82,60 @@ import { computed, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import DynamicInput from "@/components/Form/DynamicInput.vue";
+import CheckBox from "@/components/Form/CheckBox.vue";
 import Popup from "@/components/Elements/Popup.vue";
 
 import useAuth from "@/composable/api/useAuth";
+import useInput from "@/composable/Form/useInput";
 
 export default {
   components: {
     DynamicInput,
+    CheckBox,
     Popup,
   },
   setup() {
-    const { login } = useAuth();
+    const { login, register } = useAuth();
     const route = useRoute();
     const router = useRouter();
 
-    const idInput = ref({
-      errored: false,
-      errorLabel: "",
-      value: "",
-      validator: (data) => {
-        if (data.length === 0) {
-          idInput.value.errorLabel = "학번을 입력해주세요!";
+    const idInput = ref(
+      useInput({
+        placeholder: "학번",
+        validator: (data) => {
+          if (data.length === 0) {
+            idInput.value.errorLabel = "학번을 입력해주세요!";
+
+            return {
+              result: false,
+            };
+          }
 
           return {
-            result: false,
+            result: true,
           };
-        }
+        },
+      }).generated
+    );
 
-        return {
-          result: true,
-        };
-      },
-    });
+    const passwordInput = ref(
+      useInput({
+        placeholder: "비밀번호",
+        validator: (data) => {
+          if (data.length === 0) {
+            passwordInput.value.errorLabel = "비밀번호를 입력해주세요!";
 
-    const passwordInput = ref({
-      errored: false,
-      errorLabel: "",
-      value: "",
-      validator: (data) => {
-        if (data.length === 0) {
-          passwordInput.value.errorLabel = "비밀번호를 입력해주세요!";
+            return {
+              result: false,
+            };
+          }
+
           return {
-            result: false,
+            result: true,
           };
-        }
-
-        return {
-          result: true,
-        };
-      },
-    });
+        },
+      }).generated
+    );
 
     const tryLogin = async () => {
       const result = await login({
@@ -106,6 +145,10 @@ export default {
 
       if (!result.state) {
         alert(result.error.message);
+      } else {
+        if (result.state) {
+          router.push({ name: "Home" });
+        }
       }
     };
 
@@ -115,12 +158,71 @@ export default {
       return false;
     });
 
+    const idInputReg = ref(
+      useInput({
+        placeholder: "학번",
+        validator: (data) => {
+          if (data.length === 0) {
+            idInputReg.value.errorLabel = "학번을 입력해주세요!";
+
+            return {
+              result: false,
+            };
+          }
+
+          return {
+            result: true,
+          };
+        },
+      }).generated
+    );
+
+    const passwordInputReg = ref(
+      useInput({
+        placeholder: "비밀번호",
+        validator: (data) => {
+          if (data.length === 0) {
+            passwordInputReg.value.errorLabel = "비밀번호를 입력해주세요!";
+
+            return {
+              result: false,
+            };
+          }
+
+          return {
+            result: true,
+          };
+        },
+      }).generated
+    );
+
+    const privacyChecked = ref(false);
+
+    const tryRegistry = async () => {
+      const result = await register({
+        id: idInputReg.value.value,
+        pw: passwordInputReg.value.value,
+      });
+
+      if (!result.state) {
+        alert(result.error.message);
+      } else {
+        if (result.state) {
+          router.push({ name: "Home" });
+        }
+      }
+    };
+
     return {
       router,
       idInput,
       passwordInput,
       tryLogin,
       showRegistryPopup,
+      idInputReg,
+      passwordInputReg,
+      privacyChecked,
+      tryRegistry,
     };
   },
 };

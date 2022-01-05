@@ -20,7 +20,7 @@
       class="popup relative rounded-xl bg-white px-6 py-4 shadow-lg z-10"
       :style="`width: ${width}`"
     >
-      <div class="flex items-start justify-between">
+      <div class="flex items-start justify-between mb-4">
         <p class="text-2xl font-black">{{ title }}</p>
         <button @click="close"><x-icon class="w-6 h-6 text-black" /></button>
       </div>
