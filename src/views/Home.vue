@@ -176,9 +176,9 @@ import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 
 import "vue3-carousel/dist/carousel.css";
 
-import MainHeader from "../components/MainHeader.vue";
-import TextBox from "../components/TextBox.vue";
-import DynamicInput from "../components/DynamicInput.vue";
+import MainHeader from "@/components/Layout/MainHeader.vue";
+import TextBox from "@/components/Elements/TextBox.vue";
+import DynamicInput from "@/components/Form/DynamicInput.vue";
 
 export default {
   name: "Home",

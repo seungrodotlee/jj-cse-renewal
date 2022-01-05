@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import MainHeader from "./components/MainHeader.vue";
+import MainHeader from "@/components/Layout/MainHeader.vue";
 
 export default {
   components: {

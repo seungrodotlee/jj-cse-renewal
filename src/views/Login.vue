@@ -34,25 +34,32 @@
         <a href="https://instar.jj.ac.kr/" target="_blank">비밀번호 찾기</a>
       </div>
     </div>
-    <div>
-      {{ showRegistryPopup }}
-    </div>
+    <popup
+      v-if="showRegistryPopup"
+      :title="'전주대학교 계정 연동'"
+      @close="router.push({ name: 'Login' })"
+    ></popup>
   </div>
 </template>
 
 <script>
 import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
-import DynamicInput from "../components/DynamicInput.vue";
-import useAuth from "../composable/api/useAuth";
+import { useRoute, useRouter } from "vue-router";
+
+import DynamicInput from "@/components/Form/DynamicInput.vue";
+import Popup from "@/components/Elements/Popup.vue";
+
+import useAuth from "@/composable/api/useAuth";
 
 export default {
   components: {
     DynamicInput,
+    Popup,
   },
   setup() {
     const { login } = useAuth();
     const route = useRoute();
+    const router = useRouter();
 
     const idInput = ref({
       errored: false,
@@ -109,6 +116,7 @@ export default {
     });
 
     return {
+      router,
       idInput,
       passwordInput,
       tryLogin,
