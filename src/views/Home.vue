@@ -114,30 +114,17 @@
           <div class="flex w-full mb-4">
             <dynamic-input
               class="flex-grow mr-4"
-              :placeholder="'제목'"
-              v-model:errored="nameInput.errored"
-              :errorLabel="nameInput.errorLabel"
-              v-model:value="nameInput.value"
-              :validator="nameInput.validator"
+              :data="nameInput"
+              @update="nameInput.onUpdate"
             />
-            <dynamic-input
-              :placeholder="'학년'"
-              v-model:errored="yearInput.errored"
-              :errorLabel="yearInput.errorLabel"
-              v-model:value="yearInput.value"
-              :validator="yearInput.validator"
-            />
+            <dynamic-input :data="yearInput" @update="yearInput.onUpdate" />
           </div>
           <div class="flex flex-col bg-white rounded-xl">
             <dynamic-input
-              :placeholder="'내용'"
-              :isTextArea="true"
-              v-model:errored="contentInput.errored"
-              :errorLabel="contentInput.errorLabel"
-              v-model:value="contentInput.value"
-              :validator="contentInput.validator"
+              :data="contentInput"
               :borderless="true"
-              v-model:focused="contentInput.focused"
+              :isTextArea="true"
+              @update="contentInput.onUpdate"
             />
             <button
               class="
@@ -170,6 +157,8 @@ import MainHeader from "@/components/Layout/MainHeader.vue";
 import TextBox from "@/components/Elements/TextBox.vue";
 import DynamicInput from "@/components/Form/DynamicInput.vue";
 
+import useInput from "@/composable/Form/useInput";
+
 export default {
   name: "Home",
   components: {
@@ -182,6 +171,7 @@ export default {
     DynamicInput,
   },
   setup() {
+    const { generate } = useInput();
     const carouselCurrentIdx = ref(0);
     const carouselImages = ref([
       {
@@ -338,67 +328,35 @@ export default {
       }, 2500);
     });
 
-    const nameInput = ref({
-      errored: false,
-      errorLabel: "",
-      value: "",
-      validator: (data) => {
+    const nameInput = generate({
+      placeholder: "제목",
+      errorCondition: (data) => {
         if (data.length === 0) {
-          nameInput.value.errorLabel = "제목을 입력해주세요!";
-          return {
-            result: false,
-          };
+          return "제목을 입력해주세요!";
         }
-
-        return {
-          result: true,
-        };
       },
     });
 
-    const yearInput = ref({
-      errored: false,
-      errorLabel: "",
-      value: "",
-      validator: (data) => {
+    const yearInput = generate({
+      placeholder: "학년",
+      fixCondition: (data) => {
         if (isNaN(data)) {
-          console.log("not num");
-          return {
-            result: false,
-            fixed: "",
-          };
+          return "";
         }
-
-        if (parseInt(data) < 0 || parseInt(data) > 4) {
-          yearInput.value.errorLabel = "학년은 1~4 사이로 입력해주세요!";
-          return {
-            result: false,
-          };
-        }
-
-        return {
-          result: true,
-        };
+      },
+      errorCondition: (data) => {
+        if (data < 1 || data > 4)
+          return "학년은 1~4 사이의 값으로 입력해주세요!";
       },
     });
 
-    const contentInput = ref({
-      errored: false,
-      errorLabel: "",
-      value: "",
-      validator: (data) => {
+    const contentInput = generate({
+      placeholder: "내용",
+      errorCondition: (data) => {
         if (data.length === 0) {
-          contentInput.value.errorLabel = "내용을 채워주세요!";
-          return {
-            result: false,
-          };
+          return "내용을 입력해주세요!";
         }
-
-        return {
-          result: true,
-        };
       },
-      focused: false,
     });
 
     return {

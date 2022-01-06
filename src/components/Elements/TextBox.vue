@@ -4,9 +4,8 @@
     :style="`line-height: ${font * 1.2}rem; height: ${
       font * 1.2 * line
     }rem; -webkit-line-clamp: ${line}`"
-  >
-    {{ content }}
-  </div>
+    v-html="content"
+  ></div>
 </template>
 
 <script>

@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import Notice from "../views/Notice.vue";
 import Article from "../views/Article.vue";
 import JoinEvent from "../views/Event/Join.vue";
+import EventList from "../views/Event/List.vue";
 
 const routes = [
   {
@@ -32,9 +33,14 @@ const routes = [
     component: Article,
   },
   {
-    path: "/event/join",
+    path: "/event/join/:idx",
     name: "JoinEvent",
     component: JoinEvent,
+  },
+  {
+    path: "/event",
+    name: "EventList",
+    component: EventList,
   },
 ];
 

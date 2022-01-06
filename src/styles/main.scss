@@ -19,4 +19,35 @@ body {
   @apply bg-gray-500;
 }
 
+#app {
+  --vc-pgn-background-color: #dee2e6;
+  --vc-pgn-active-color: #6c757d;
+
+  .ql-toolbar,
+  .ql-container {
+    @apply border-gray-300;
+
+    * {
+      @apply border-gray-300;
+    }
+  }
+
+  .ql-toolbar {
+    @apply border-t-0 border-l-0 border-r-0;
+  }
+
+  .ql-container {
+    @apply border-b-0 border-l-0 border-r-0;
+  }
+
+  .ql-picker-label,
+  .ql-picker-options {
+    @apply rounded-md;
+  }
+
+  .ql-formats > button {
+    @apply rounded-md;
+  }
+}
+
 @import "./animations.scss";

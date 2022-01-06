@@ -1,5 +1,8 @@
 <template>
-  <div class="g-input relative flex flex-col" :class="errored ? 'errored' : ''">
+  <div
+    class="g-input relative flex flex-col"
+    :class="data.errored ? 'errored' : ''"
+  >
     <div class="flex rounded-xl bg-white">
       <div
         class="relative flex-grow rounded-xl transition duration-500"
@@ -14,7 +17,6 @@
             placeholder
             absolute
             bg-white
-            px-2
             origin-left
             transition-transform
             duration-500
@@ -27,9 +29,9 @@
               ? `transform -translate-y-${isSmall ? 7 : 4} scale-75`
               : '',
             lastCharEmphasized ? 'emphasized' : '',
-            isSmall ? ' transformtop-4 -translate-x-2' : 'top-6',
+            isSmall ? 'px-2 transformtop-4 -translate-x-2' : 'top-6',
           ]"
-          v-html="placeholder"
+          v-html="data.placeholder"
         ></div>
         <input
           v-if="!isTextArea"
@@ -76,11 +78,11 @@
     </div>
 
     <div
-      v-if="errored"
+      v-if="data.errored"
       class="error-label top-full mt-2 text-sm"
       :class="isSmall ? 'ml-6' : 'ml-10'"
     >
-      {{ errorLabel }}
+      {{ data.errorLabel }}
     </div>
   </div>
 </template>
@@ -90,23 +92,7 @@ import { ref, toRefs, computed, watch } from "vue";
 
 export default {
   props: {
-    placeholder: {
-      type: String,
-      default: "Placeholder",
-    },
-    errored: {
-      type: Boolean,
-      default: false,
-    },
-    errorLabel: String,
-    disabled: Boolean,
-    isSmall: Boolean,
-    inputType: String,
-    value: String,
-    validator: {
-      type: Function,
-      default: () => true,
-    },
+    data: Object,
     isTextArea: {
       type: Boolean,
       default: false,
@@ -116,11 +102,14 @@ export default {
       default: false,
     },
     borderless: Boolean,
+    inputType: String,
     focused: Boolean,
     isSmall: Boolean,
+    disabled: Boolean,
   },
   setup(props, { emit }) {
-    const { disabled, errored, value, validator } = toRefs(props);
+    const { disabled, data } = toRefs(props);
+    const { errored, value, validator } = toRefs(data.value);
 
     const isFocused = ref(false);
     const isErrored = ref(false);
@@ -139,7 +128,7 @@ export default {
     const toggleFocus = (value) => {
       isFocused.value = value;
 
-      emit("update:focused", isFocused.value);
+      emit("update", "focused", isFocused.value);
     };
 
     const resizeTextarea = (e) => {
@@ -151,13 +140,13 @@ export default {
     watch(valueBind, (to) => {
       let result = validator.value(to);
 
-      emit("update:errored", !result.result);
+      emit("update", "errored", !result.result);
 
       console.log(result);
-      if (result.fixed || result.fixed === "") {
+      if (result.fixed !== undefined) {
         valueBind.value = result.fixed;
       } else {
-        emit("update:value", to);
+        emit("update", "value", to);
       }
     });
 

@@ -1,6 +1,8 @@
 <template>
   <div class="container mx-auto flex flex-col">
-    <p class="text-2xl font-bold my-4">공지사항</p>
+    <p class="text-3xl font-black py-4 mb-4 border-b border-gray-300">
+      공지사항
+    </p>
     <data-table
       class="w-full mb-4"
       :fields="fields"

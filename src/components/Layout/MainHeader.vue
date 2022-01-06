@@ -8,9 +8,8 @@
         <router-link :to="{ name: 'Notice', params: { page: 1 } }"
           >공지사항</router-link
         >
-        <router-link to="/">학과 이벤트</router-link>
+        <router-link :to="{ name: 'EventList' }">학과 이벤트</router-link>
         <router-link to="/">커뮤니티</router-link>
-        <router-link to="/">FAQ</router-link>
         <router-link v-if="!logined" :to="{ name: 'Login' }"
           >로그인</router-link
         >

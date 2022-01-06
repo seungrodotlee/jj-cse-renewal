@@ -24,16 +24,24 @@ export default function useAPI() {
           const form = new FormData();
 
           if (data) {
-            for (let key in data) {
+            const keys = Object.keys(data);
+            console.log(data);
+            keys.forEach((key) => {
+              console.log(key, data[key]);
               if (typeof data[key] == "object") {
-                for (let innerKey in data[key]) {
+                const innerKeys = Object.keys(data[key]);
+
+                innerKeys.forEach((innerKey) => {
+                  console.log(key + "." + innerKey, data[key][innerKey]);
                   form.append(key + `[${innerKey}]`, data[key][innerKey]);
-                }
+                });
               } else {
                 form.append(key, data[key]);
               }
-            }
+            });
           }
+
+          console.log(data, form.values);
 
           const response = await axios.post(domain + url, form, {
             withCredentials: true,

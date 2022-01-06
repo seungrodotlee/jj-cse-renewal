@@ -7,20 +7,14 @@
       />
       <dynamic-input
         class="flex-grow mb-4"
-        :placeholder="'학번'"
-        v-model:errored="idInput.errored"
-        :errorLabel="idInput.errorLabel"
-        v-model:value="idInput.value"
-        :validator="idInput.validator"
+        :data="idInput"
+        @update="idInput.onUpdate"
       />
       <dynamic-input
         class="flex-grow mb-4"
-        :placeholder="'비밀번호'"
         :inputType="'password'"
-        v-model:errored="passwordInput.errored"
-        :errorLabel="passwordInput.errorLabel"
-        v-model:value="passwordInput.value"
-        :validator="passwordInput.validator"
+        :data="passwordInput"
+        @update="passwordInput.onUpdate"
       />
       <button
         class="py-4 rounded-xl bg-primary text-white mb-4"
@@ -44,21 +38,15 @@
           <dynamic-input
             class="flex-grow mb-4"
             :isSmall="true"
-            :placeholder="'학번'"
-            v-model:errored="idInputReg.errored"
-            :errorLabel="idInputReg.errorLabel"
-            v-model:value="idInputReg.value"
-            :validator="idInputReg.validator"
+            :data="idInputReg"
+            @update="idInputReg.onUpdate"
           />
           <dynamic-input
             class="flex-grow mb-4"
             :isSmall="true"
-            :placeholder="'비밀번호'"
             :inputType="'password'"
-            v-model:errored="passwordInputReg.errored"
-            :errorLabel="passwordInputReg.errorLabel"
-            v-model:value="passwordInputReg.value"
-            :validator="passwordInputReg.validator"
+            :data="passwordInputReg"
+            @update="passwordInputReg.onUpdate"
           />
           <check-box
             class="mb-4"
@@ -98,44 +86,26 @@ export default {
     const { login, register } = useAuth();
     const route = useRoute();
     const router = useRouter();
+    const { generate } = useInput();
 
-    const idInput = ref(
-      useInput({
-        placeholder: "학번",
-        validator: (data) => {
-          if (data.length === 0) {
-            idInput.value.errorLabel = "학번을 입력해주세요!";
+    const idInput = generate({
+      placeholder: "학번",
+      fixCondition: (data) => {
+        if (isNaN(data)) {
+          return data.slice(0, data.length - 1);
+        }
+      },
+      errorCondition: (data) => {
+        if (data.length !== 9) return "학번은 9자리로 입력해주세요!";
+      },
+    });
 
-            return {
-              result: false,
-            };
-          }
-
-          return {
-            result: true,
-          };
-        },
-      }).generated
-    );
-
-    const passwordInput = ref(
-      useInput({
-        placeholder: "비밀번호",
-        validator: (data) => {
-          if (data.length === 0) {
-            passwordInput.value.errorLabel = "비밀번호를 입력해주세요!";
-
-            return {
-              result: false,
-            };
-          }
-
-          return {
-            result: true,
-          };
-        },
-      }).generated
-    );
+    const passwordInput = generate({
+      placeholder: "비밀번호",
+      errorCondition: (data) => {
+        if (data.length === 0) return "비밀번호를 입력해주세요!";
+      },
+    });
 
     const tryLogin = async () => {
       const result = await login({
@@ -158,43 +128,24 @@ export default {
       return false;
     });
 
-    const idInputReg = ref(
-      useInput({
-        placeholder: "학번",
-        validator: (data) => {
-          if (data.length === 0) {
-            idInputReg.value.errorLabel = "학번을 입력해주세요!";
+    const idInputReg = generate({
+      placeholder: "학번",
+      fixCondition: (data) => {
+        if (isNaN(data)) {
+          return data.slice(0, data.length - 1);
+        }
+      },
+      errorCondition: (data) => {
+        if (data.length !== 9) return "학번은 9자리로 입력해주세요!";
+      },
+    });
 
-            return {
-              result: false,
-            };
-          }
-
-          return {
-            result: true,
-          };
-        },
-      }).generated
-    );
-
-    const passwordInputReg = ref(
-      useInput({
-        placeholder: "비밀번호",
-        validator: (data) => {
-          if (data.length === 0) {
-            passwordInputReg.value.errorLabel = "비밀번호를 입력해주세요!";
-
-            return {
-              result: false,
-            };
-          }
-
-          return {
-            result: true,
-          };
-        },
-      }).generated
-    );
+    const passwordInputReg = generate({
+      placeholder: "비밀번호",
+      errorCondition: (data) => {
+        if (data.length === 0) return "비밀번호를 입력해주세요!";
+      },
+    });
 
     const privacyChecked = ref(false);
 
