@@ -70,13 +70,14 @@
     </section>
     <section class="px-4 sm:px-0 slider-section container mx-auto mb-4">
       <carousel
+        v-if="eventList"
         :items-to-show="carouselImageShow"
         :wrap-around="true"
         :snap-align="'start'"
         class="w-full text-left"
       >
-        <slide v-for="(e, i) in events" :key="i" class="lg:pr-4">
-          <div class="flex flex-col px-4 py-4 bg-gray-200 rounded-xl">
+        <slide v-for="(e, i) in eventList" :key="i" class="lg:pr-4">
+          <div class="flex flex-col h-full px-4 py-4 bg-gray-200 rounded-xl">
             <p
               class="
                 self-start
@@ -87,19 +88,26 @@
                 bg-gray-500
                 text-white
               "
-            >
-              진행중
-            </p>
+              v-html="e.status"
+            ></p>
             <p class="text-xl w-full font-bold">{{ e.title }}</p>
             <div class="my-4">
               <text-box :line="2" :content="e.content" />
             </div>
-            <img class="mb-4" :src="e.thumbnail" />
+            <img
+              class="flex-grow mb-4 object-cover"
+              :src="
+                e.images ? e.images[0] : 'https://via.placeholder.com/1000x1000'
+              "
+            />
             <div class="flex w-full justify-between items-center">
-              <p class="text-gray-600">{{ e.datetime }}</p>
-              <button class="text-white bg-primary px-3 py-2 rounded-lg">
-                신청하기
-              </button>
+              <p class="text-gray-600">{{ e.periodSDate }}</p>
+              <router-link
+                :to="{ name: 'JoinEvent', params: { idx: e.id } }"
+                class="text-white bg-primary px-3 py-2 rounded-lg"
+              >
+                {{ e.joined ? "내 신청정보" : "신청하기" }}
+              </router-link>
             </div>
           </div>
         </slide>
@@ -149,7 +157,7 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Carousel, Slide, Navigation, Pagination } from "vue3-carousel";
 
 import "vue3-carousel/dist/carousel.css";
@@ -159,6 +167,8 @@ import TextBox from "@/components/Elements/TextBox.vue";
 import DynamicInput from "@/components/Form/DynamicInput.vue";
 
 import useInput from "@/composable/Form/useInput";
+import useEvent from "@/composable/api/useEvent";
+import useAuth from "@/composable/api/useAuth";
 
 export default {
   name: "Home",
@@ -172,7 +182,9 @@ export default {
     DynamicInput,
   },
   setup() {
+    const { logined } = useAuth();
     const { generate } = useInput();
+    const { eventList, fetchEventList } = useEvent();
 
     const carouselImageShow = ref(window.innerWidth > 1024 ? 2.5 : 1);
 
@@ -238,89 +250,6 @@ export default {
       },
     ]);
 
-    const events = ref([
-      {
-        idx: "01",
-        title: "이벤트 1",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        thumbnail: "https://via.placeholder.com/1000x1000",
-        datetime: "2021-01-01",
-      },
-      {
-        idx: "02",
-        title: "이벤트 2",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        thumbnail: "https://via.placeholder.com/1000x1000",
-        datetime: "2021-01-01",
-      },
-      {
-        idx: "03",
-        title: "이벤트 3",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        thumbnail: "https://via.placeholder.com/1000x1000",
-        datetime: "2021-01-01",
-      },
-      {
-        idx: "03",
-        title: "이벤트 4",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        thumbnail: "https://via.placeholder.com/1000x1000",
-        datetime: "2021-01-01",
-      },
-      {
-        idx: "03",
-        title: "이벤트 5",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        thumbnail: "https://via.placeholder.com/1000x1000",
-        datetime: "2021-01-01",
-      },
-    ]);
-
     onMounted(() => {
       setInterval(() => {
         if (carouselCurrentIdx.value + 1 >= carouselImages.value.length) {
@@ -363,12 +292,20 @@ export default {
       },
     });
 
+    onMounted(() => {
+      fetchEventList();
+    });
+
+    watch(logined, () => {
+      fetchEventList();
+    });
+
     return {
       carouselImageShow,
       carouselImages,
       currentCarousel,
       notices,
-      events,
+      eventList,
       nameInput,
       yearInput,
       contentInput,

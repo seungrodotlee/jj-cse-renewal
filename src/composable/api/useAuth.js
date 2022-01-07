@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, resolveDirective } from "vue";
 import { useStore } from "vuex";
 import { routerKey, useRouter } from "vue-router";
 
@@ -15,10 +15,13 @@ export default function useAuth() {
     return new Promise(async (resolve, reject) => {
       try {
         const authCheck = await post("/authCheck");
-        const result = await post("/me");
 
-        console.log("authCheck", authCheck);
-        console.log("me", result);
+        if (!authCheck.data) {
+          resolve(null);
+          return;
+        }
+
+        const result = await post("/me");
 
         resolve(result.data);
       } catch (e) {
@@ -39,12 +42,19 @@ export default function useAuth() {
           data: loginedUser,
         });
         return;
+      } else {
+        resolve({
+          statue: false,
+        });
       }
 
       const result = await post("/login", params);
 
+      console.log("login result", result);
+
       if (result.state) {
         loginedUser = await fetchProfile();
+        console.log(loginedUser);
         store.commit("setUserInfo", loginedUser);
         resolve({
           state: true,
@@ -59,16 +69,17 @@ export default function useAuth() {
   const logout = async (params) => {
     const result = await get("/logout");
 
-    console.log(result);
-
-    store.commit("setUserInfo", null);
-    router.push({ name: "Home" });
+    if (result.state) {
+      store.commit("setUserInfo", null);
+      router.push({ name: "Home" });
+    } else {
+      alert(result.error.message);
+    }
   };
 
   const register = (params) => {
     return new Promise(async (resolve, reject) => {
       const result = await post("/register", params);
-      console.log(result);
 
       if (result.cnt > 0) {
         resolve(result);

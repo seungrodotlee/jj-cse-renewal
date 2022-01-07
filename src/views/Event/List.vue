@@ -34,7 +34,7 @@
         <router-link
           :to="{ name: 'JoinEvent', params: { idx: e.id } }"
           class="flex-center mt-2 py-2 rounded-lg bg-primary text-white"
-          >{{ e.joined ? "응모정보" : "응모하기" }}</router-link
+          >{{ e.joined ? "내 신청정보" : "신청하기" }}</router-link
         >
       </div>
     </div>
@@ -58,15 +58,11 @@ export default {
     const { logined } = useAuth();
 
     onMounted(() => {
-      if (logined.value) {
-        fetchEventList();
-      }
+      fetchEventList();
     });
 
     watch(logined, () => {
-      if (!eventList.value) {
-        fetchEventList();
-      }
+      fetchEventList();
     });
 
     return {

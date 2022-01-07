@@ -30,7 +30,6 @@ export default function useInput() {
           pack.result = false;
         }
 
-        console.log(fixed);
         if (fixed || fixed === "") {
           pack.fixed = fixed;
           pack.result = false;

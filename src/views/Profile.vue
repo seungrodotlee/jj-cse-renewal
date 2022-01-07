@@ -121,8 +121,6 @@ export default {
     });
 
     const fillInUserInfo = () => {
-      console.log("u i", logined.value);
-
       profileImage.value = logined.value.imagePath
         ? "https://jj-cse.online" + logined.value.imagePath
         : "https://via.placeholder.com/500x500/FFFFFF/CED4DA?text=NO+PROFILE";

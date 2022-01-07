@@ -70,7 +70,6 @@ export default {
     const items = data.fetched(data.content, data.user);
 
     const selectItem = (item) => {
-      console.log(item);
       router.push({
         name: "Article",
         params: { board: "notice", idx: item.content_id },

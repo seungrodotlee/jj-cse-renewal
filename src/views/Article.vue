@@ -44,7 +44,6 @@ export default {
       });
 
       data.value = await board[`get${casedBoard}`](route.params.idx);
-      console.log(data.value);
     };
 
     onMounted(() => {

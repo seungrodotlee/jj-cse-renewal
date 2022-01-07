@@ -67,15 +67,16 @@ export default function useEvent() {
 
     for (let i in pack) {
       const p = pack[i];
-      console.log(p);
 
-      const joined = await checkEventJoined({
-        id: p.id,
-        user_id: logined.value.id,
-      });
+      if (logined.value) {
+        const joined = await checkEventJoined({
+          id: p.id,
+          user_id: logined.value.id,
+        });
 
-      if (joined) {
-        p.joined = joined;
+        if (joined) {
+          p.joined = joined;
+        }
       }
 
       const statusData = getEventStatus(p);
@@ -93,8 +94,6 @@ export default function useEvent() {
       try {
         const result = await post("/common/event/join", params);
 
-        console.log(result);
-
         resolve(result);
       } catch (e) {
         console.error(e.stack);
@@ -106,8 +105,6 @@ export default function useEvent() {
     return new Promise(async (resolve, reject) => {
       try {
         const result = await post("/common/event/modify/join", params);
-
-        console.log(result);
 
         resolve(result);
       } catch (e) {

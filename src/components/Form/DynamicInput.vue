@@ -132,8 +132,6 @@ export default {
     };
 
     const resizeTextarea = (e) => {
-      console.log(e.target);
-
       e.target.style.height = e.target.scrollHeight + "px";
     };
 
@@ -142,7 +140,6 @@ export default {
 
       emit("update", "errored", !result.result);
 
-      console.log(result);
       if (result.fixed !== undefined) {
         valueBind.value = result.fixed;
       } else {
@@ -152,7 +149,6 @@ export default {
 
     watch(value, (to) => {
       valueBind.value = to;
-      console.log(valueBind.value);
     });
 
     return {

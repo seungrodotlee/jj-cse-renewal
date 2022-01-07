@@ -482,7 +482,6 @@ export default {
         }
       },
       errorCondition: (data) => {
-        console.log(data.length !== 9);
         if (data.length !== 9) return "학번은 9자리로 입력해주세요!";
       },
     });
@@ -491,7 +490,6 @@ export default {
       placeholder: "학년",
       fixCondition: (data) => {
         if (isNaN(data)) {
-          console.log("sliced", data.slice(0, data.length - 1));
           return data.slice(0, data.length - 1);
         }
       },
@@ -532,14 +530,12 @@ export default {
 
     const eventFileChanged = (e) => {
       const files = Array.from(e.target.files);
-      console.log(files);
       let fileList = files.map((f) => f.name);
 
       eventFile.value = eventFile.value || [];
       eventFileList.value = eventFileList.value || [];
       eventFile.value = [...eventFile.value, ...fileList];
       eventFileList.value = [...eventFileList.value, ...files];
-      console.log(eventFileList.value);
     };
 
     const privacyChecked = ref(false);

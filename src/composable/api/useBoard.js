@@ -17,8 +17,6 @@ export default function useBoard() {
       const item = dummyNotices
         .fetched(dummyNotices.content, dummyNotices.user)
         .find((d) => {
-          console.log(d.content_id, idx);
-          console.log(d.content_id === idx);
           return d.content_id === idx;
         });
       resolve(item);

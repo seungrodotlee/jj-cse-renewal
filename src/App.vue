@@ -8,12 +8,13 @@
   </div>
 </template>
 <script>
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 
 import MainHeader from "@/components/Layout/MainHeader.vue";
 import MainFooter from "@/components/Layout/MainFooter.vue";
 
 import useAuth from "@/composable/api/useAuth";
+import { PhoneIncomingIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
@@ -21,14 +22,18 @@ export default {
     MainFooter,
   },
   setup() {
-    const { login } = useAuth();
+    const { login, logined } = useAuth();
 
     onMounted(async () => {
       const result = await login();
 
-      if (result.state) {
-        console.log("logined", result.data);
+      if (!result.state) {
+        console.log(result);
       }
+    });
+
+    watch(logined, (to) => {
+      console.log(to);
     });
   },
 };
