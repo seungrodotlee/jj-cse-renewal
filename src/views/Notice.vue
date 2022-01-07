@@ -1,6 +1,16 @@
 <template>
   <div class="container mx-auto flex flex-col">
-    <p class="text-3xl font-black py-4 mb-4 border-b border-gray-300">
+    <p
+      class="
+        px-4
+        sm:px-0
+        text-3xl
+        font-black
+        py-4
+        mb-4
+        border-b border-gray-300
+      "
+    >
       공지사항
     </p>
     <data-table
@@ -11,7 +21,7 @@
       @itemSelected="selectItem"
     />
     <pager
-      class="self-end mb-4"
+      class="self-end mb-4 mr-4 sm:mr-0"
       :current="page"
       :total="Math.ceil(items.length / 8)"
     />

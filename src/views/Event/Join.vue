@@ -1,7 +1,7 @@
 <template>
   <div v-if="eventData" class="container mx-auto flex flex-col">
     <div class="flex items-center mt-4 border-b border-gray-300">
-      <p class="text-3xl font-black py-4 pb-5">
+      <p class="text-3xl font-black py-4 pb-5 px-4 sm:px-0">
         {{ eventData.title }} 이벤트 참여
       </p>
       <p
@@ -43,10 +43,22 @@
         <p v-html="eventData.content"></p>
       </div>
     </div>
-    <p class="text-xl font-extrabold py-4 border-b border-gray-300 mb-4">
+    <p
+      class="
+        text-xl
+        font-extrabold
+        py-4
+        px-4
+        sm:px-0
+        border-b border-gray-300
+        mb-4
+      "
+    >
       기본정보
     </p>
-    <div class="grid grid-cols-4 gap-4">
+    <div
+      class="grid grid-cols-4 gap-4 pb-4 px-4 sm:px-0 border-b border-gray-300"
+    >
       <dynamic-input
         class="col-start-1 col-end-3"
         :data="nameInput"
@@ -78,10 +90,20 @@
         @update="etcInput.onUpdate"
       />
     </div>
-    <p class="text-xl font-extrabold py-4 border-b border-gray-300 mb-4">
+    <p
+      class="
+        text-xl
+        font-extrabold
+        py-4
+        px-4
+        sm:px-0
+        border-b border-gray-300
+        mb-4
+      "
+    >
       이벤트 참여 폼
     </p>
-    <div class="flex-grow mb-8">
+    <div class="flex-grow mb-8 px-4 sm:px-0">
       <div class="border border-gray-300 rounded-xl overflow-hidden mb-4">
         <quill-editor
           style="min-height: 300px"
@@ -105,7 +127,8 @@
         <div
           class="
             relative
-            flex
+            flex flex-col
+            sm:flex-row
             w-full
             bg-white
             border border-gray-300
@@ -133,13 +156,29 @@
                 m-1
               "
             >
-              <p>{{ ef }} (등록된 이미지)</p>
-              <button
-                class="text-white bg-red-600 p-2 rounded-lg"
-                @click="eventData.existFiles.splice(i, 1)"
-              >
-                <x-icon class="w-4 h-4" />
-              </button>
+              <p>등록된 이미지 {{ i }}</p>
+              <div class="flex">
+                <a
+                  :href="`https://jj-cse.online${ef}`"
+                  class="
+                    flex-center
+                    bg-primary
+                    text-sm text-white
+                    font-light
+                    px-2
+                    rounded-lg
+                    mr-2
+                  "
+                  target="_blank"
+                  >보기</a
+                >
+                <button
+                  class="text-white bg-red-600 p-2 rounded-lg"
+                  @click="eventData.existFiles.splice(i, 1)"
+                >
+                  <x-icon class="w-4 h-4" />
+                </button>
+              </div>
             </div>
             <div
               v-for="(e, i) in eventFile"
@@ -170,7 +209,7 @@
           </div>
           <label
             for="event-file"
-            class="flex-center px-4 py-2 bg-primary text-white cursor-pointer"
+            class="flex-center px-4 py-4 bg-primary text-white cursor-pointer"
             >파일 선택</label
           >
         </div>

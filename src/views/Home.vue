@@ -3,7 +3,7 @@
     <section class="main-carousel mb-4">
       <img class="w-full object-cover" :src="currentCarousel" />
     </section>
-    <section class="container mx-auto mb-4 flex">
+    <section class="container mx-auto mb-4 flex flex-col lg:flex-row">
       <div
         class="
           flex
@@ -13,6 +13,7 @@
           font-bold
           text-2xl
           px-8
+          py-4
           whitespace-nowrap
           flex-shrink-0
         "
@@ -67,14 +68,14 @@
         </div>
       </div>
     </section>
-    <section class="slider-section container mx-auto mb-4">
+    <section class="px-4 sm:px-0 slider-section container mx-auto mb-4">
       <carousel
-        :items-to-show="2.5"
+        :items-to-show="carouselImageShow"
         :wrap-around="true"
         :snap-align="'start'"
         class="w-full text-left"
       >
-        <slide v-for="(e, i) in events" :key="i" class="pr-4">
+        <slide v-for="(e, i) in events" :key="i" class="lg:pr-4">
           <div class="flex flex-col px-4 py-4 bg-gray-200 rounded-xl">
             <p
               class="
@@ -107,7 +108,7 @@
         </template>
       </carousel>
     </section>
-    <section class="w-full bg-gray-200 mb-4">
+    <section class="px-4 sm:px-0 w-full bg-gray-200 mb-4">
       <div class="container mx-auto py-8">
         <p class="text-4xl font-bold mb-8">익명 건의사항</p>
         <div class="flex flex-col">
@@ -172,6 +173,9 @@ export default {
   },
   setup() {
     const { generate } = useInput();
+
+    const carouselImageShow = ref(window.innerWidth > 1024 ? 2.5 : 1);
+
     const carouselCurrentIdx = ref(0);
     const carouselImages = ref([
       {
@@ -360,6 +364,7 @@ export default {
     });
 
     return {
+      carouselImageShow,
       carouselImages,
       currentCarousel,
       notices,

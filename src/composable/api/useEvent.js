@@ -67,6 +67,7 @@ export default function useEvent() {
 
     for (let i in pack) {
       const p = pack[i];
+      console.log(p);
 
       const joined = await checkEventJoined({
         id: p.id,

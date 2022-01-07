@@ -1,53 +1,80 @@
 <template>
   <div class="container mx-auto">
-    <p class="text-3xl font-black py-4 mb-4 border-b border-gray-300">
+    <p
+      class="
+        text-3xl
+        font-black
+        py-4
+        mb-4
+        px-4
+        sm:px-0
+        border-b border-gray-300
+      "
+    >
       기본정보
     </p>
-    <div class="flex p-4 rounded-xl bg-gray-200">
-      <div class="flex-center w-1/3 mr-8">
-        <img
-          class="h-80 w-80 rounded-full object-contain"
-          :src="profileImage"
-        />
-      </div>
-      <div class="flex flex-col flex-grow">
-        <dynamic-input
-          class="mb-2"
-          :data="nameInput"
-          @update="nameInput.onUpdate"
-        />
-        <div class="flex mb-2">
-          <dynamic-input
-            class="w-2/3 mr-2"
-            :data="idInput"
-            @update="idInput.onUpdate"
-          />
-          <dynamic-input
-            class="w-1/3"
-            :data="yearInput"
-            @update="yearInput.onUpdate"
+    <div class="px-4 sm:px-0">
+      <div
+        class="
+          flex flex-col
+          items-center
+          md:flex-row
+          p-4
+          rounded-xl
+          bg-gray-200
+        "
+      >
+        <div class="flex-center w-1/2 sm:w-1/3 mr-8 mb-4 md:mb-0">
+          <img
+            class="
+              sm:w-80
+              max-w-full
+              rounded-full
+              object-contain
+              overflow-hidden
+            "
+            :src="profileImage"
           />
         </div>
-        <dynamic-input
-          class="mb-2"
-          :data="majorInput"
-          @update="majorInput.onUpdate"
-        />
-        <dynamic-input
-          class="mb-2"
-          :data="clubInput"
-          @update="clubInput.onUpdate"
-        />
-        <dynamic-input
-          :isTextArea="true"
-          :data="infoInput"
-          @update="infoInput.onUpdate"
-        />
+        <div class="flex flex-col flex-grow">
+          <dynamic-input
+            class="mb-2"
+            :data="nameInput"
+            @update="nameInput.onUpdate"
+          />
+          <div class="flex mb-2">
+            <dynamic-input
+              class="w-2/3 mr-2"
+              :data="idInput"
+              @update="idInput.onUpdate"
+            />
+            <dynamic-input
+              class="w-1/3"
+              :data="yearInput"
+              @update="yearInput.onUpdate"
+            />
+          </div>
+          <dynamic-input
+            class="mb-2"
+            :data="majorInput"
+            @update="majorInput.onUpdate"
+          />
+          <dynamic-input
+            class="mb-2"
+            :data="clubInput"
+            @update="clubInput.onUpdate"
+          />
+          <dynamic-input
+            :isTextArea="true"
+            :data="infoInput"
+            @update="infoInput.onUpdate"
+          />
+        </div>
       </div>
+      <button class="w-full py-4 mt-4 mb-4 rounded-xl bg-primary text-white">
+        저장
+      </button>
     </div>
-    <button class="w-full py-4 mt-4 rounded-xl bg-primary text-white">
-      저장
-    </button>
   </div>
 </template>
 

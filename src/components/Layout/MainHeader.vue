@@ -1,6 +1,6 @@
 <template>
   <div class="fixed w-full h-20 border-b border-black bg-white z-50">
-    <div class="container mx-auto h-full flex justify-between">
+    <div class="container mx-auto px-4 sm:px-0 h-full flex justify-between">
       <router-link to="/" class="flex items-center">
         <img :src="require('/src/assets/img/main-logo.png')" />
       </router-link>

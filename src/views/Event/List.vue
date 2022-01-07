@@ -1,9 +1,19 @@
 <template>
-  <div class="container mx-auto">
-    <p class="text-3xl font-black py-4 mb-4 border-b border-gray-300">
+  <div class="container mx-auto mb-4">
+    <p
+      class="
+        text-3xl
+        font-black
+        py-4
+        mb-4
+        px-4
+        sm:px-0
+        border-b border-gray-300
+      "
+    >
       이벤트 목록
     </p>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-4 gap-4 px-4 sm:px-0">
       <div v-for="e in eventList" :key="e.id" class="flex flex-col">
         <img
           class="flex-grow object-cover rounded-lg"
@@ -23,8 +33,8 @@
         <text-box :line="3" :content="e.content" />
         <router-link
           :to="{ name: 'JoinEvent', params: { idx: e.id } }"
-          class="flex-center py-2 rounded-lg bg-primary text-white"
-          >{{ e.joined ? "응모내역 확인하기" : "응모하기" }}</router-link
+          class="flex-center mt-2 py-2 rounded-lg bg-primary text-white"
+          >{{ e.joined ? "응모정보" : "응모하기" }}</router-link
         >
       </div>
     </div>
