@@ -1,9 +1,11 @@
 import { ref } from "vue";
 
 import useAPI from "./useAPI";
+import useAuth from "./useAuth";
 
 export default function useEvent() {
   const { get, post } = useAPI().request;
+  const { logined } = useAuth();
 
   const eventList = ref(null);
 
@@ -40,6 +42,20 @@ export default function useEvent() {
     };
   };
 
+  const checkEventJoined = (params) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let result = await post("/common/event/modify", params);
+
+        result = result === "" ? null : result;
+
+        resolve(result);
+      } catch (e) {
+        console.error(e.stack);
+      }
+    });
+  };
+
   const fetchEventList = async () => {
     const result = await get("/common/event");
 
@@ -49,13 +65,24 @@ export default function useEvent() {
 
     const pack = result.data;
 
-    pack.forEach((p) => {
+    for (let i in pack) {
+      const p = pack[i];
+
+      const joined = await checkEventJoined({
+        id: p.id,
+        user_id: logined.value.id,
+      });
+
+      if (joined) {
+        p.joined = joined;
+      }
+
       const statusData = getEventStatus(p);
       p.status = statusData.status;
       p.timeLeft = statusData.timeLeft;
 
       p.images = getImagePath(p);
-    });
+    }
 
     eventList.value = pack;
   };
@@ -74,9 +101,25 @@ export default function useEvent() {
     });
   };
 
+  const modifyEvent = (params) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await post("/common/event/modify/join", params);
+
+        console.log(result);
+
+        resolve(result);
+      } catch (e) {
+        console.error(e.stack);
+      }
+    });
+  };
+
   return {
     eventList,
     fetchEventList,
     joinEvent,
+    modifyEvent,
+    checkEventJoined,
   };
 }

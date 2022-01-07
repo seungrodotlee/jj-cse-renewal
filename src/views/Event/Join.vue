@@ -113,12 +113,64 @@
             overflow-hidden
           "
         >
-          <p class="flex-grow px-4 py-2">
-            {{ eventFile ? eventFile : "선택된 파일 없음" }}
+          <p
+            v-if="!eventFile && !eventData.existFiles"
+            class="flex-grow px-4 py-2"
+          >
+            선택된 파일 없음
           </p>
+          <div v-else class="flex-grow flex flex-col p-1">
+            <div
+              v-for="(ef, i) in eventData.existFiles"
+              :key="i"
+              class="
+                flex
+                justify-between
+                items-center
+                p-2
+                rounded-lg
+                border border-gray-300
+                m-1
+              "
+            >
+              <p>{{ ef }} (등록된 이미지)</p>
+              <button
+                class="text-white bg-red-600 p-2 rounded-lg"
+                @click="eventData.existFiles.splice(i, 1)"
+              >
+                <x-icon class="w-4 h-4" />
+              </button>
+            </div>
+            <div
+              v-for="(e, i) in eventFile"
+              :key="i"
+              class="
+                flex
+                justify-between
+                items-center
+                p-2
+                rounded-lg
+                border border-gray-300
+                m-1
+              "
+            >
+              <p>{{ e }}</p>
+              <button
+                class="text-white bg-red-600 p-2 rounded-lg"
+                @click="
+                  () => {
+                    eventFile.splice(i, 1);
+                    eventFileList.splice(i, 1);
+                  }
+                "
+              >
+                <x-icon class="w-4 h-4" />
+              </button>
+            </div>
+          </div>
           <label
             for="event-file"
-            class="px-4 py-2 bg-primary text-white cursor-pointer"
+            class="flex-center px-4 py-2 bg-primary text-white cursor-pointer"
             >파일 선택</label
           >
         </div>
@@ -311,18 +363,19 @@
         class="w-full py-4 bg-primary text-white rounded-xl"
         @click="submit"
       >
-        신청하기
+        {{ eventData.joined ? "수정하기" : "신청하기" }}
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { QuillEditor } from "@vueup/vue-quill";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import { XIcon } from "@heroicons/vue/outline";
 
 import DynamicInput from "@/components/Form/DynamicInput.vue";
 import CheckBox from "@/components/Form/CheckBox.vue";
@@ -342,11 +395,12 @@ export default {
     Slide,
     Pagination,
     Navigation,
+    XIcon,
   },
   setup() {
     const route = useRoute();
     const router = useRouter();
-    const { eventList, fetchEventList, joinEvent } = useEvent();
+    const { eventList, fetchEventList, joinEvent, modifyEvent } = useEvent();
     const { logined } = useAuth();
     const { generate } = useInput();
 
@@ -365,7 +419,11 @@ export default {
         result.color = "gray";
       }
 
-      console.log(result);
+      const existFiles = checkJoinedData(result);
+
+      if (existFiles) {
+        result.existFiles = existFiles;
+      }
 
       return result;
     });
@@ -436,17 +494,13 @@ export default {
     const eventFileChanged = (e) => {
       const files = Array.from(e.target.files);
       console.log(files);
-      let fileList = "";
-      files.forEach((f, i) => {
-        fileList += f.name;
+      let fileList = files.map((f) => f.name);
 
-        if (i < files.length - 1) {
-          fileList += " / ";
-        }
-      });
-
-      eventFile.value = fileList;
-      eventFileList.value = files;
+      eventFile.value = eventFile.value || [];
+      eventFileList.value = eventFileList.value || [];
+      eventFile.value = [...eventFile.value, ...fileList];
+      eventFileList.value = [...eventFileList.value, ...files];
+      console.log(eventFileList.value);
     };
 
     const privacyChecked = ref(false);
@@ -467,10 +521,20 @@ export default {
         params.fileArray = eventFileList.value;
       }
 
-      const result = await joinEvent(params);
+      let result;
+      if (eventData.value.joined) {
+        params.id = eventData.value.joined.id;
+        if (eventData.value.existFiles) {
+          params.beforeArray = eventData.value.existFiles;
+        }
+
+        result = await modifyEvent(params);
+      } else {
+        result = await joinEvent(params);
+      }
 
       if (result.state) {
-        alert("신청을 완료하였습니다!");
+        alert(`${eventData.value.joined ? "수정" : "신청"}을 완료하였습니다!`);
       } else {
         alert(result.error);
       }
@@ -478,7 +542,37 @@ export default {
       router.push({ name: "EventList" });
     };
 
-    onMounted(() => {
+    const checkJoinedData = (data) => {
+      const joined = data.joined;
+
+      nameInput.value.value = logined.value.name || "";
+      idInput.value.value = logined.value.user_id || "";
+      yearInput.value.value = logined.value.year || "";
+      emailInput.value.value = logined.value.email || "";
+      phoneInput.value.value = logined.value.phon || "";
+
+      if (joined) {
+        const { name, year, email, phone, etc, filePath } = joined;
+
+        nameInput.value.value = name;
+        idInput.value.value = parseInt(logined.value.user_id);
+        yearInput.value.value = parseInt(year);
+        emailInput.value.value = email;
+        phoneInput.value.value = phone;
+        etcInput.value.value = etc;
+        content.value = joined.content;
+
+        return JSON.parse(filePath);
+      }
+    };
+
+    onMounted(async () => {
+      if (!eventList.value && logined.value) {
+        fetchEventList();
+      }
+    });
+
+    watch(logined, () => {
       if (!eventList.value) {
         fetchEventList();
       }
@@ -495,6 +589,7 @@ export default {
       content,
       eventFileEl,
       eventFile,
+      eventFileList,
       eventFileChanged,
       privacyChecked,
       submit,

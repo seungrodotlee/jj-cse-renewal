@@ -25,7 +25,7 @@
             z-10
           "
           :class="[
-            isFocused || valueBind.length > 0
+            isFocused || ('' + valueBind).length > 0
               ? `transform -translate-y-${isSmall ? 7 : 4} scale-75`
               : '',
             lastCharEmphasized ? 'emphasized' : '',
@@ -152,6 +152,7 @@ export default {
 
     watch(value, (to) => {
       valueBind.value = to;
+      console.log(valueBind.value);
     });
 
     return {

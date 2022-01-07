@@ -9,12 +9,14 @@
           >공지사항</router-link
         >
         <router-link :to="{ name: 'EventList' }">학과 이벤트</router-link>
-        <router-link to="/">커뮤니티</router-link>
+        <!-- <router-link to="/">커뮤니티</router-link> -->
         <router-link v-if="!logined" :to="{ name: 'Login' }"
           >로그인</router-link
         >
         <button v-else @click="logout">로그아웃</button>
-        <router-link v-if="logined" to="/">프로필</router-link>
+        <router-link v-if="logined" :to="{ name: 'Profile' }"
+          >프로필</router-link
+        >
       </div>
     </div>
   </div>

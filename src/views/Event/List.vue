@@ -24,7 +24,7 @@
         <router-link
           :to="{ name: 'JoinEvent', params: { idx: e.id } }"
           class="flex-center py-2 rounded-lg bg-primary text-white"
-          >응모하기</router-link
+          >{{ e.joined ? "응모내역 확인하기" : "응모하기" }}</router-link
         >
       </div>
     </div>
@@ -32,10 +32,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 import TextBox from "@/components/Elements/TextBox.vue";
 
+import useAuth from "@/composable/api/useAuth";
 import useEvent from "@/composable/api/useEvent";
 
 export default {
@@ -44,14 +45,22 @@ export default {
   },
   setup() {
     const { eventList, fetchEventList } = useEvent();
+    const { logined } = useAuth();
 
     onMounted(() => {
-      fetchEventList();
+      if (logined.value) {
+        fetchEventList();
+      }
+    });
+
+    watch(logined, () => {
+      if (!eventList.value) {
+        fetchEventList();
+      }
     });
 
     return {
       eventList,
-      getImagePath,
     };
   },
 };

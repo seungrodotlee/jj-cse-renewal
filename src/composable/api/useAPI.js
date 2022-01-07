@@ -1,4 +1,5 @@
 import axios from "axios";
+import { isVNode } from "vue";
 
 export default function useAPI() {
   const domain = "https://jj-cse.online/api";
@@ -33,6 +34,7 @@ export default function useAPI() {
 
                 innerKeys.forEach((innerKey) => {
                   console.log(key + "." + innerKey, data[key][innerKey]);
+
                   form.append(key + `[${innerKey}]`, data[key][innerKey]);
                 });
               } else {

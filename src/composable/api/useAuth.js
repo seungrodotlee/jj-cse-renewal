@@ -11,12 +11,29 @@ export default function useAuth() {
 
   const logined = computed(() => store.getters.getUserInfo);
 
+  const fetchProfile = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const authCheck = await post("/authCheck");
+        const result = await post("/me");
+
+        console.log("authCheck", authCheck);
+        console.log("me", result);
+
+        resolve(result.data);
+      } catch (e) {
+        console.error(e.stack);
+      }
+    });
+  };
+
   const login = (params) => {
     return new Promise(async (resolve, reject) => {
-      const loginedUser = JSON.parse(localStorage.getItem("loginedUser"));
+      let loginedUser = await fetchProfile();
 
       if (loginedUser) {
         store.commit("setUserInfo", loginedUser);
+
         resolve({
           state: true,
           data: loginedUser,
@@ -26,19 +43,24 @@ export default function useAuth() {
 
       const result = await post("/login", params);
 
-      console.log(result);
-
       if (result.state) {
-        localStorage.setItem("loginedUser", JSON.stringify(result.data));
-        store.commit("setUserInfo", result.data);
+        loginedUser = await fetchProfile();
+        store.commit("setUserInfo", loginedUser);
+        resolve({
+          state: true,
+          data: loginedUser,
+        });
+      } else {
+        resolve(result);
       }
-
-      resolve(result);
     });
   };
 
-  const logout = (params) => {
-    localStorage.removeItem("loginedUser");
+  const logout = async (params) => {
+    const result = await get("/logout");
+
+    console.log(result);
+
     store.commit("setUserInfo", null);
     router.push({ name: "Home" });
   };
