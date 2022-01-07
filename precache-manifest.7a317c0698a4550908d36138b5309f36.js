@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ae3618bfc180f02f958e",
-    "url": "/jj-cse-renewal/css/app.ac7543e8.css"
+    "revision": "8b351954179356b32be8",
+    "url": "/jj-cse-renewal/css/app.0f216a07.css"
   },
   {
     "revision": "3e8e19a40fbc8202ae63",
@@ -12,12 +12,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/jj-cse-renewal/img/main-logo.0c77189d.png"
   },
   {
-    "revision": "789058ac39049529642efd1fa1a17a4a",
+    "revision": "d0a1a67a5bdf8ffa68f2d48ac28b71f7",
     "url": "/jj-cse-renewal/index.html"
   },
   {
-    "revision": "ae3618bfc180f02f958e",
-    "url": "/jj-cse-renewal/js/app.e09e348f.js"
+    "revision": "8b351954179356b32be8",
+    "url": "/jj-cse-renewal/js/app.d7124922.js"
   },
   {
     "revision": "3e8e19a40fbc8202ae63",
