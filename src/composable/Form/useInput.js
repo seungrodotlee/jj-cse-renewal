@@ -6,6 +6,7 @@ export default function useInput() {
     errored = false,
     errorLabel = "",
     value = "",
+    initial = null,
     focused = false,
     errorCondition = (data) => null,
     fixCondition = (data) => null,
@@ -16,7 +17,8 @@ export default function useInput() {
       errored,
       errorLabel,
       focused,
-      value,
+      value: initial || value,
+      initial,
       validator: (data) => {
         const errorLabel = errorCondition(data);
         const fixed = fixCondition(data);
@@ -43,6 +45,8 @@ export default function useInput() {
         if (event === "value") onChange(data);
       },
     });
+
+    console.log(input.value);
 
     return input;
   };

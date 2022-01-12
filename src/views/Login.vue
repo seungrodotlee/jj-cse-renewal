@@ -158,9 +158,7 @@ export default {
       if (!result.state) {
         alert(result.error.message);
       } else {
-        if (result.state) {
-          router.push({ name: "Home" });
-        }
+        router.push({ name: "Home" });
       }
     };
 

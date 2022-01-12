@@ -401,6 +401,7 @@
       />
       <button
         class="w-full py-4 bg-primary text-white rounded-xl"
+        :class="privacyChecked && changed ? '' : 'disabled'"
         @click="submit"
       >
         {{ eventData.joined ? "수정하기" : "신청하기" }}
@@ -451,39 +452,40 @@ export default {
         (e) => e.id === parseInt(route.params.idx)
       );
 
-      if (result.status === "진행중") {
-        result.color = "blue";
-      } else if (result.status === "마감") {
-        result.color = "red";
-      } else {
-        result.color = "gray";
-      }
-
       const existFiles = checkJoinedData(result);
 
       if (existFiles) {
         result.existFiles = existFiles;
       }
 
+      console.log(result);
+
       return result;
     });
 
+    const changed = ref(false);
     const nameInput = generate({
       placeholder: "이름",
-      errorCondition: (data) => {
+      errorCondition(data) {
         if (!data || data.length < 2) return "이름을 두글자 이상 입력해주세요!";
+      },
+      onChange(data) {
+        changed.value = true;
       },
     });
 
     const idInput = generate({
       placeholder: "학번",
-      fixCondition: (data) => {
+      fixCondition(data) {
         if (isNaN(data)) {
           return data.slice(0, data.length - 1);
         }
       },
-      errorCondition: (data) => {
+      errorCondition(data) {
         if (data.length !== 9) return "학번은 9자리로 입력해주세요!";
+      },
+      onChange(data) {
+        changed.value = true;
       },
     });
 
@@ -494,32 +496,44 @@ export default {
           return data.slice(0, data.length - 1);
         }
       },
-      errorCondition: (data) => {
+      errorCondition(data) {
         if (data < 1 || data > 4)
           return "학년은 1~4 사이의 값으로 입력해주세요!";
+      },
+      onChange(data) {
+        changed.value = true;
       },
     });
 
     const emailInput = generate({
       placeholder: "이메일",
-      errorCondition: (data) => {
+      errorCondition(data) {
         const emailReg =
           /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
         if (!emailReg.test(data)) return "이메일 형식이 올바르지 않습니다.";
       },
+      onChange(data) {
+        changed.value = true;
+      },
     });
 
     const phoneInput = generate({
       placeholder: "휴대폰 번호 (- 제외)",
-      errorCondition: (data) => {
+      errorCondition(data) {
         if (data.length < 10 || data.length > 11)
           return "올바른 전화번호를 입력해주세요";
+      },
+      onChange(data) {
+        changed.value = true;
       },
     });
 
     const etcInput = generate({
       placeholder: "기타/참고사항",
+      onChange(data) {
+        changed.value = true;
+      },
     });
 
     const content = ref("");
@@ -530,6 +544,7 @@ export default {
     const eventFile = ref(null);
 
     const eventFileChanged = (e) => {
+      changed.value = true;
       const files = Array.from(e.target.files);
       let fileList = files.map((f) => f.name);
 
@@ -581,22 +596,25 @@ export default {
     const checkJoinedData = (data) => {
       const joined = data.joined;
 
-      nameInput.value.value = logined.value.name || "";
-      idInput.value.value = logined.value.user_id || "";
-      yearInput.value.value = logined.value.year || "";
-      emailInput.value.value = logined.value.email || "";
-      phoneInput.value.value = logined.value.phon || "";
+      nameInput.value.initial = logined.value.name || "";
+      idInput.value.initial = logined.value.user_id || "";
+      yearInput.value.initial = logined.value.year || "";
+      emailInput.value.initial = logined.value.email || "";
+      phoneInput.value.initial = logined.value.phon || "";
 
       if (joined) {
         const { name, year, email, phone, etc, filePath } = joined;
 
-        nameInput.value.value = name;
-        idInput.value.value = parseInt(logined.value.user_id);
-        yearInput.value.value = parseInt(year);
-        emailInput.value.value = email;
-        phoneInput.value.value = phone;
-        etcInput.value.value = etc;
+        nameInput.value.initial = name;
+        idInput.value.initial = parseInt(logined.value.user_id);
+        yearInput.value.initial = parseInt(year);
+        emailInput.value.initial = email;
+        phoneInput.value.initial = phone;
+        etcInput.value.initial = etc;
+        changedByLoadedData = true;
         content.value = joined.content;
+
+        console.log(idInput.value);
 
         return JSON.parse(filePath);
       }
@@ -614,7 +632,18 @@ export default {
       }
     });
 
+    let changedByLoadedData = false;
+    watch(content, (to) => {
+      if (changedByLoadedData) {
+        changedByLoadedData = false;
+        return;
+      }
+
+      changed.value = true;
+    });
+
     return {
+      changed,
       eventData,
       nameInput,
       idInput,

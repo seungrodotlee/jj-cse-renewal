@@ -52,7 +52,7 @@ body {
 
 button.disabled,
 a.disabled {
-  @apply bg-gray-200 text-gray-400 pointer-events-none;
+  @apply bg-gray-200 text-gray-600 pointer-events-none;
 }
 
 @import "./animations.scss";

@@ -24,9 +24,15 @@
         <div class="flex items-center text-sm mt-4 mb-2">
           <p
             v-html="e.status"
-            class="px-2 py-1 mr-2 rounded-md bg-blue-300"
+            class="px-2 py-1 mr-2 rounded-md"
+            :class="`bg-${e.color}-200 text-${e.color}-600`"
           ></p>
-          <p v-if="e.timeLeft">D-{{ e.timeLeft }}</p>
+          <p
+            v-if="e.timeLeft"
+            class="px-2 py-1 rounded-md bg-gray-200 text-gray-600"
+          >
+            D-{{ e.timeLeft }}
+          </p>
         </div>
         <p class="text-xl font-bold">{{ e.title }}</p>
         <text-box class="text font-bold mb-2" :line="1" :content="e.subText" />
@@ -34,6 +40,7 @@
         <router-link
           :to="{ name: 'JoinEvent', params: { idx: e.id } }"
           class="flex-center mt-2 py-2 rounded-lg bg-primary text-white"
+          :class="!e.joined && !e.enabled ? 'disabled' : ''"
           >{{ e.joined ? "내 신청정보" : "신청하기" }}</router-link
         >
       </div>

@@ -3,7 +3,7 @@
     class="g-input relative flex flex-col"
     :class="data.errored ? 'errored' : ''"
   >
-    <div class="flex rounded-xl bg-white">
+    <div class="flex rounded-xl" :class="disabled ? 'bg-gray-100' : 'bg-white'">
       <div
         class="relative flex-grow rounded-xl transition duration-500"
         :class="[
@@ -16,7 +16,6 @@
           class="
             placeholder
             absolute
-            bg-white
             origin-left
             transition-transform
             duration-500
@@ -29,7 +28,12 @@
               ? `transform -translate-y-${isSmall ? 7 : 4} scale-75`
               : '',
             lastCharEmphasized ? 'emphasized' : '',
-            isSmall ? 'px-2 transformtop-4 -translate-x-2' : 'top-6',
+            isSmall
+              ? `px-2 transformtop-4 -translate-x-2 ${
+                  !disabled ? 'bg-white' : ''
+                }`
+              : 'top-6',
+            disabled ? 'bg-gray-100 text-gray-500' : '',
           ]"
           v-html="data.placeholder"
         ></div>
@@ -43,11 +47,12 @@
             transition-transform
             duration-500
           "
-          :class="
+          :class="[
             isFocused || valueBind.length > 0
               ? 'transform translate-y-[10px]'
-              : ''
-          "
+              : '',
+            disabled ? 'bg-gray-100' : 'bg-white',
+          ]"
           v-model="valueBind"
           @focus="toggleFocus(true)"
           @blur="toggleFocus(false)"
@@ -109,17 +114,17 @@ export default {
   },
   setup(props, { emit }) {
     const { disabled, data } = toRefs(props);
-    const { errored, value, validator } = toRefs(data.value);
+    const { errored, value, validator, initial } = toRefs(data.value);
 
     const isFocused = ref(false);
     const isErrored = ref(false);
-    const valueBind = ref(value.value);
+    const valueBind = ref(initial.value || value.value);
     const inputDynamicStyles = computed(() => {
       let border = isFocused.value ? "border-primary" : "border-gray-300";
       border = errored.value ? "border-red-600" : border;
 
       let disabledStyle = disabled.value
-        ? " bg-gray-300 text-g-gray pointer-events-none"
+        ? " bg-gray-100 text-gray-500 pointer-events-none"
         : "";
 
       return border + disabledStyle;
@@ -146,7 +151,7 @@ export default {
       } else {
         if (updateFromOriginChange) {
           updateFromOriginChange = false;
-          return;
+          // return;
         }
 
         emit("update", "value", to);
@@ -154,6 +159,10 @@ export default {
     });
 
     watch(value, (to) => {
+      valueBind.value = to;
+    });
+
+    watch(initial, (to) => {
       updateFromOriginChange = true;
       valueBind.value = to;
     });

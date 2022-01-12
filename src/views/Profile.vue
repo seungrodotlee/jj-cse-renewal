@@ -46,7 +46,15 @@
             />
             <label
               for="profile-img"
-              class="px-2 py-1 rounded-lg mt-4 text-sm text-white bg-primary"
+              class="
+                px-2
+                py-1
+                rounded-lg
+                mt-4
+                text-sm text-white
+                bg-primary
+                cursor-pointer
+              "
               >이미지 변경</label
             >
           </fieldset>
@@ -55,20 +63,29 @@
           <dynamic-input
             class="mb-2"
             :data="nameInput"
+            :disabled="true"
             @update="nameInput.onUpdate"
           />
           <div class="flex mb-2">
             <dynamic-input
               class="w-2/3 mr-2"
               :data="idInput"
+              :disabled="true"
               @update="idInput.onUpdate"
             />
             <dynamic-input
               class="w-1/3"
               :data="yearInput"
+              :disabled="true"
               @update="yearInput.onUpdate"
             />
           </div>
+          <dynamic-input
+            class="mb-2"
+            :data="majorInput"
+            :disabled="true"
+            @update="majorInput.onUpdate"
+          />
           <div class="flex mb-2">
             <dynamic-input
               class="w-1/2 mr-2"
@@ -81,11 +98,6 @@
               @update="emailInput.onUpdate"
             />
           </div>
-          <dynamic-input
-            class="mb-2"
-            :data="majorInput"
-            @update="majorInput.onUpdate"
-          />
           <dynamic-input
             class="mb-2"
             :data="clubInput"
@@ -138,7 +150,7 @@ export default {
     let profileImageFiles = null;
     const profileImageChanged = (e) => {
       const file = e.target.files[0];
-      profileImageFiles = file;
+      profileImageFiles = e.target.files;
 
       const reader = new FileReader();
 
@@ -210,23 +222,22 @@ export default {
       if (result.state) {
         alert(result.message);
       } else {
-        alert(result.error.message);
+        alert(result.error);
       }
     };
 
     const fillInUserInfo = () => {
-      console.log(logined.value);
       profileImage.value = logined.value.imagePath
         ? "https://jj-cse.online" + logined.value.imagePath
         : "https://via.placeholder.com/500x500/FFFFFF/CED4DA?text=NO+PROFILE";
-      nameInput.value.value = logined.value.name;
-      idInput.value.value = logined.value.user_id;
-      yearInput.value.value = logined.value.year;
-      phoneInput.value.value = logined.value.phon || "";
-      emailInput.value.value = logined.value.email || "";
-      majorInput.value.value = logined.value.hakbu || "";
-      clubInput.value.value = logined.value.clud || "";
-      infoInput.value.value = logined.value.info || "";
+      nameInput.value.initial = logined.value.name;
+      idInput.value.initial = logined.value.user_id;
+      yearInput.value.initial = logined.value.year;
+      phoneInput.value.initial = logined.value.phon || "";
+      emailInput.value.initial = logined.value.email || "";
+      majorInput.value.initial = logined.value.hakbu || "";
+      clubInput.value.initial = logined.value.clud || "";
+      infoInput.value.initial = logined.value.info || "";
     };
 
     onMounted(() => {

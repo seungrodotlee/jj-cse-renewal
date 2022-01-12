@@ -43,23 +43,19 @@ export default function useAuth() {
         });
         return;
       } else {
-        resolve({
-          statue: false,
-        });
-      }
+        const result = await post("/login", params);
 
-      const result = await post("/login", params);
+        if (result.state) {
+          loginedUser = await fetchProfile();
 
-      if (result.state) {
-        loginedUser = await fetchProfile();
-
-        store.commit("setUserInfo", loginedUser);
-        resolve({
-          state: true,
-          data: loginedUser,
-        });
-      } else {
-        resolve(result);
+          store.commit("setUserInfo", loginedUser);
+          resolve({
+            state: true,
+            data: loginedUser,
+          });
+        } else {
+          resolve(result);
+        }
       }
     });
   };
@@ -92,8 +88,9 @@ export default function useAuth() {
 
   const updateProfile = (params) => {
     return new Promise(async (resolve, reject) => {
+      console.log(params);
       const result = await post("/auth/profile", params);
-
+      console.log(result);
       resolve(result);
     });
   };

@@ -26,17 +26,25 @@ export default function useEvent() {
     const diff = periodEnd.getTime() - current.getTime();
 
     let status = "";
+    let color = "";
+    let enabled = false;
 
     if (!data.periodSDate || current < periodStart) {
       status = "공지중";
+      color = "gray";
     } else if (current > periodStart || current < periodEnd) {
       status = "진행중";
+      color = "blue";
+      enabled = true;
     } else {
       status = "마감";
+      color = "red";
     }
 
     return {
-      status: status,
+      enabled,
+      color,
+      status,
       timeLeft:
         status === "진행중" ? parseInt(diff / (1000 * 3600 * 24)) : null,
     };
@@ -82,6 +90,8 @@ export default function useEvent() {
       const statusData = getEventStatus(p);
       p.status = statusData.status;
       p.timeLeft = statusData.timeLeft;
+      p.color = statusData.color;
+      p.enabled = statusData.enabled;
 
       p.images = getImagePath(p);
     }
