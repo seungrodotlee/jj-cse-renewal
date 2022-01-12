@@ -12,16 +12,17 @@
       "
     >
       <div>
-        <p class="text-gray-600 font-bold">{{ data.content_id }}</p>
+        <p class="text-gray-600 font-bold">{{ data.id }}</p>
         <p class="text-3xl font-black mt-2">{{ data.title }}</p>
       </div>
       <div class="text-right text-sm text-gray-600 font-bold">
-        <p>{{ data.user_name }}</p>
+        <p>{{ data.writer }}</p>
         <p>{{ data.created_at }}</p>
+        <p>{{ data.views }} views</p>
       </div>
     </div>
     <article class="py-4 px-4 sm:px-0">
-      {{ data.context }}
+      {{ data.content }}
     </article>
   </div>
 </template>
@@ -43,7 +44,10 @@ export default {
         return g.replace("-", "").toUpperCase();
       });
 
-      data.value = await board[`get${casedBoard}`](route.params.idx);
+      const list = await board[`fetch${casedBoard}`]();
+
+      data.value = list[0].child.find((c) => (c.id = route.params.idx));
+      console.log(data.value);
     };
 
     onMounted(() => {

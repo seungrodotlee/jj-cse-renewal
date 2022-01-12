@@ -13,7 +13,7 @@
     >
       이벤트 목록
     </p>
-    <div class="grid grid-cols-4 gap-4 px-4 sm:px-0">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-4 sm:px-0">
       <div v-for="e in eventList" :key="e.id" class="flex flex-col">
         <img
           class="flex-grow object-cover rounded-lg"

@@ -111,6 +111,7 @@
           v-model:content="content"
           contentType="html"
           theme="snow"
+          toolbar="full"
         />
       </div>
 

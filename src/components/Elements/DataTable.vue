@@ -40,7 +40,7 @@ export default {
     page: Number,
     limit: {
       type: Number,
-      default: 8,
+      default: 10,
     },
   },
   emits: ["itemSelected"],
@@ -48,8 +48,8 @@ export default {
     const { data, page, limit } = toRefs(props);
 
     const displayDatas = computed(() => {
-      const sp = (page.value - 1) * limit.value;
-      const ep = page.value * limit.value;
+      const sp = page.value * limit.value;
+      const ep = (page.value + 1) * limit.value;
 
       return data.value.slice(sp, ep);
     });

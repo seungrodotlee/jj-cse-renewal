@@ -50,11 +50,9 @@ export default function useAuth() {
 
       const result = await post("/login", params);
 
-      console.log("login result", result);
-
       if (result.state) {
         loginedUser = await fetchProfile();
-        console.log(loginedUser);
+
         store.commit("setUserInfo", loginedUser);
         resolve({
           state: true,
@@ -92,10 +90,19 @@ export default function useAuth() {
     });
   };
 
+  const updateProfile = (params) => {
+    return new Promise(async (resolve, reject) => {
+      const result = await post("/auth/profile", params);
+
+      resolve(result);
+    });
+  };
+
   return {
     logined,
     login,
     logout,
     register,
+    updateProfile,
   };
 }

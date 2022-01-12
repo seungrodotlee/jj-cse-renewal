@@ -31,10 +31,6 @@ export default {
         console.log(result);
       }
     });
-
-    watch(logined, (to) => {
-      console.log(to);
-    });
   },
 };
 </script>

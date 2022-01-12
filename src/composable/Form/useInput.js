@@ -9,6 +9,7 @@ export default function useInput() {
     focused = false,
     errorCondition = (data) => null,
     fixCondition = (data) => null,
+    onChange = (data) => null,
   }) => {
     const input = ref({
       placeholder,
@@ -39,6 +40,7 @@ export default function useInput() {
       },
       onUpdate: (event, data) => {
         input.value[event] = data;
+        if (event === "value") onChange(data);
       },
     });
 

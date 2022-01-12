@@ -9,9 +9,13 @@ export default function useAPI() {
     get(url, data = null) {
       return new Promise(async (resolve, reject) => {
         try {
-          const response = await axios.get(domain + url, data, {
-            withCredentials: true,
-          });
+          const response = await axios.get(
+            domain + url,
+            { params: data },
+            {
+              withCredentials: true,
+            }
+          );
 
           resolve(response.data);
         } catch (e) {

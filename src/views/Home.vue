@@ -36,7 +36,7 @@
           >
             공지사항
           </p>
-          <carousel :autoplay="2500" :wrap-around="true">
+          <carousel v-if="notices" :autoplay="2500" :wrap-around="true">
             <slide
               v-for="(n, i) in notices"
               :key="i"
@@ -46,7 +46,18 @@
               <div class="py-2">
                 <text-box :line="3" :content="n.content" />
               </div>
-              <p class="text-gray-600">{{ n.datetime }}</p>
+              <div class="w-full flex justify-between">
+                <p class="text-gray-600">{{ n.created_at }}</p>
+                <router-link
+                  :to="{
+                    name: 'Article',
+                    params: { board: 'notices', idx: n.id },
+                  }"
+                  class="text-sm px-2 py-1 text-white bg-primary rounded-md"
+                >
+                  더보기
+                </router-link>
+              </div>
             </slide>
           </carousel>
         </div>
@@ -123,8 +134,8 @@
           <div class="flex w-full mb-4">
             <dynamic-input
               class="flex-grow mr-4"
-              :data="nameInput"
-              @update="nameInput.onUpdate"
+              :data="titleInput"
+              @update="titleInput.onUpdate"
             />
             <dynamic-input :data="yearInput" @update="yearInput.onUpdate" />
           </div>
@@ -146,6 +157,7 @@
                 text-white
                 rounded-lg
               "
+              @click="submitQuestion"
             >
               건의하기
             </button>
@@ -169,6 +181,7 @@ import DynamicInput from "@/components/Form/DynamicInput.vue";
 import useInput from "@/composable/Form/useInput";
 import useEvent from "@/composable/api/useEvent";
 import useAuth from "@/composable/api/useAuth";
+import useBoard from "@/composable/api/useBoard";
 
 export default {
   name: "Home",
@@ -185,6 +198,7 @@ export default {
     const { logined } = useAuth();
     const { generate } = useInput();
     const { eventList, fetchEventList } = useEvent();
+    const { fetchCategory, fetchNotices, addQuestion } = useBoard();
 
     const carouselImageShow = ref(window.innerWidth > 1024 ? 2.5 : 1);
 
@@ -208,47 +222,47 @@ export default {
       return carouselImages.value[carouselCurrentIdx.value].src;
     });
 
-    const notices = ref([
-      {
-        title: "공지사항 1",
-        content: `
-          국회의원이 회기전에 체포 또는 구금된 때에는
-          현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다.
-          국군의 조직과 편성은 법률로 정한다.
-          모든 국민은 근로의 의무를 진다.
-          국가는 근로의 의무의 내용과 조건을 민주주의원칙에 따라 법률로 정한다.
-        `,
-        datetime: "2021-10-10",
-      },
-      {
-        title: "공지사항 2",
-        content: `
-          대통령의 임기는 5년으로 하며, 중임할 수 없다.
-          교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-          법률이 정하는 바에 의하여 보장된다.
-          대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-          모든 국민은 그 보호하는 자녀에게 적어도
-          초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-          언론·출판에 대한 허가나 검열과
-          집회·결사에 대한 허가는 인정되지 아니한다.
-        `,
-        datetime: "2022-01-01",
-      },
-      {
-        title: "공지사항 3",
-        content: `
-          내용 3
-        `,
-        datetime: "2022-01-02",
-      },
-      {
-        title: "공지사항 4",
-        content: `
-          내용 4
-        `,
-        datetime: "2022-01-03",
-      },
-    ]);
+    // const notices = ref([
+    //   {
+    //     title: "공지사항 1",
+    //     content: `
+    //       국회의원이 회기전에 체포 또는 구금된 때에는
+    //       현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다.
+    //       국군의 조직과 편성은 법률로 정한다.
+    //       모든 국민은 근로의 의무를 진다.
+    //       국가는 근로의 의무의 내용과 조건을 민주주의원칙에 따라 법률로 정한다.
+    //     `,
+    //     datetime: "2021-10-10",
+    //   },
+    //   {
+    //     title: "공지사항 2",
+    //     content: `
+    //       대통령의 임기는 5년으로 하며, 중임할 수 없다.
+    //       교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
+    //       법률이 정하는 바에 의하여 보장된다.
+    //       대법원장은 국회의 동의를 얻어 대통령이 임명한다.
+    //       모든 국민은 그 보호하는 자녀에게 적어도
+    //       초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
+    //       언론·출판에 대한 허가나 검열과
+    //       집회·결사에 대한 허가는 인정되지 아니한다.
+    //     `,
+    //     datetime: "2022-01-01",
+    //   },
+    //   {
+    //     title: "공지사항 3",
+    //     content: `
+    //       내용 3
+    //     `,
+    //     datetime: "2022-01-02",
+    //   },
+    //   {
+    //     title: "공지사항 4",
+    //     content: `
+    //       내용 4
+    //     `,
+    //     datetime: "2022-01-03",
+    //   },
+    // ]);
 
     onMounted(() => {
       setInterval(() => {
@@ -261,7 +275,9 @@ export default {
       }, 2500);
     });
 
-    const nameInput = generate({
+    const notices = ref(null);
+
+    const titleInput = generate({
       placeholder: "제목",
       errorCondition: (data) => {
         if (data.length === 0) {
@@ -292,8 +308,26 @@ export default {
       },
     });
 
-    onMounted(() => {
+    const submitQuestion = async () => {
+      const params = {
+        title: titleInput.value.value,
+        year: yearInput.value.value,
+        content: contentInput.value.value,
+      };
+
+      const result = await addQuestion(params);
+
+      alert(result.message);
+    };
+
+    onMounted(async () => {
+      await fetchCategory();
       fetchEventList();
+      const result = await fetchNotices();
+
+      console.log(result);
+      notices.value = result[0].child;
+      console.log("notices", notices.value);
     });
 
     watch(logined, () => {
@@ -306,9 +340,10 @@ export default {
       currentCarousel,
       notices,
       eventList,
-      nameInput,
+      titleInput,
       yearInput,
       contentInput,
+      submitQuestion,
     };
   },
 };

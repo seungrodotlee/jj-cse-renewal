@@ -135,6 +135,7 @@ export default {
       e.target.style.height = e.target.scrollHeight + "px";
     };
 
+    let updateFromOriginChange = false;
     watch(valueBind, (to) => {
       let result = validator.value(to);
 
@@ -143,11 +144,17 @@ export default {
       if (result.fixed !== undefined) {
         valueBind.value = result.fixed;
       } else {
+        if (updateFromOriginChange) {
+          updateFromOriginChange = false;
+          return;
+        }
+
         emit("update", "value", to);
       }
     });
 
     watch(value, (to) => {
+      updateFromOriginChange = true;
       valueBind.value = to;
     });
 

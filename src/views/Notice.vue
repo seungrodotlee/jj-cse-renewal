@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto flex flex-col">
+  <div class="container mx-auto flex flex-col" v-if="items">
     <p
       class="
         px-4
@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import DataTable from "@/components/Elements/DataTable.vue";
 import Pager from "@/components/Elements/Pager.vue";
 
-import data from "@/dummys/notice";
+import useBoard from "@/composable/api/useBoard";
 
 export default {
   components: {
@@ -45,12 +45,13 @@ export default {
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const { fetchNotices } = useBoard();
 
-    const page = computed(() => parseInt(route.params.page));
+    const page = computed(() => parseInt(route.params.page) - 1);
 
     const fields = ref([
       {
-        key: "content_id",
+        key: "id",
         label: "번호",
       },
       {
@@ -58,7 +59,7 @@ export default {
         label: "제목",
       },
       {
-        key: "user_name",
+        key: "writer",
         label: "글쓴이",
       },
       {
@@ -67,14 +68,20 @@ export default {
       },
     ]);
 
-    const items = data.fetched(data.content, data.user);
+    const items = ref(null);
 
     const selectItem = (item) => {
       router.push({
         name: "Article",
-        params: { board: "notice", idx: item.content_id },
+        params: { board: "notices", idx: item.id },
       });
     };
+
+    onMounted(async () => {
+      const result = await fetchNotices(page.value);
+      items.value = result[0].child;
+      console.log(items.value);
+    });
 
     return {
       page,

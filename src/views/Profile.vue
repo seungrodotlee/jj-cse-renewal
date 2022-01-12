@@ -24,7 +24,7 @@
           bg-gray-200
         "
       >
-        <div class="flex-center w-1/2 sm:w-1/3 mr-8 mb-4 md:mb-0">
+        <div class="flex-center flex-col w-1/2 sm:w-1/3 mr-8 mb-4 md:mb-0">
           <img
             class="
               sm:w-80
@@ -35,6 +35,21 @@
             "
             :src="profileImage"
           />
+          <fieldset class="flex relative">
+            <input
+              id="profile-img"
+              class="absolute opacity-0"
+              type="file"
+              accept="image/jpeg, image/jpg, image/png, image/gif"
+              style="z-index: -5"
+              @change="profileImageChanged"
+            />
+            <label
+              for="profile-img"
+              class="px-2 py-1 rounded-lg mt-4 text-sm text-white bg-primary"
+              >이미지 변경</label
+            >
+          </fieldset>
         </div>
         <div class="flex flex-col flex-grow">
           <dynamic-input
@@ -54,6 +69,18 @@
               @update="yearInput.onUpdate"
             />
           </div>
+          <div class="flex mb-2">
+            <dynamic-input
+              class="w-1/2 mr-2"
+              :data="phoneInput"
+              @update="phoneInput.onUpdate"
+            />
+            <dynamic-input
+              class="w-1/2"
+              :data="emailInput"
+              @update="emailInput.onUpdate"
+            />
+          </div>
           <dynamic-input
             class="mb-2"
             :data="majorInput"
@@ -71,7 +98,17 @@
           />
         </div>
       </div>
-      <button class="w-full py-4 mt-4 mb-4 rounded-xl bg-primary text-white">
+      <dynamic-input
+        class="mt-4"
+        :data="passwordInput"
+        :inputType="'password'"
+        @update="passwordInput.onUpdate"
+      />
+      <button
+        class="w-full py-4 mt-4 mb-4 rounded-xl bg-primary text-white"
+        :class="changed && passworded ? '' : 'disabled'"
+        @click="submit"
+      >
         저장
       </button>
     </div>
@@ -91,10 +128,27 @@ export default {
     DynamicInput,
   },
   setup() {
-    const { logined } = useAuth();
+    const { logined, updateProfile } = useAuth();
     const { generate } = useInput();
 
+    const changed = ref(false);
+
     const profileImage = ref(null);
+
+    let profileImageFiles = null;
+    const profileImageChanged = (e) => {
+      const file = e.target.files[0];
+      profileImageFiles = file;
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        profileImage.value = reader.result;
+        changed.value = true;
+      };
+
+      reader.readAsDataURL(file);
+    };
 
     const nameInput = generate({
       placeholder: "이름",
@@ -108,25 +162,68 @@ export default {
       placeholder: "학년",
     });
 
+    const phoneInput = generate({
+      placeholder: "전화번호",
+    });
+
+    const emailInput = generate({
+      placeholder: "이메일",
+    });
+
     const majorInput = generate({
       placeholder: "학부",
     });
 
     const clubInput = generate({
       placeholder: "동아리",
+      onChange(data) {
+        changed.value = true;
+      },
     });
 
     const infoInput = generate({
       placeholder: "간단 소개",
+      onChange(data) {
+        changed.value = true;
+      },
     });
 
+    const passworded = ref(false);
+    const passwordInput = generate({
+      placeholder: "비밀번호를 한번 더 입력해주세요",
+      onChange(data) {
+        passworded.value = true;
+      },
+    });
+
+    const submit = async () => {
+      const params = {
+        phon: phoneInput.value.value,
+        email: emailInput.value.value,
+        info: infoInput.value.value,
+        fileArray: profileImageFiles,
+        password: passwordInput.value.value,
+      };
+
+      const result = await updateProfile(params);
+
+      if (result.state) {
+        alert(result.message);
+      } else {
+        alert(result.error.message);
+      }
+    };
+
     const fillInUserInfo = () => {
+      console.log(logined.value);
       profileImage.value = logined.value.imagePath
         ? "https://jj-cse.online" + logined.value.imagePath
         : "https://via.placeholder.com/500x500/FFFFFF/CED4DA?text=NO+PROFILE";
       nameInput.value.value = logined.value.name;
       idInput.value.value = logined.value.user_id;
       yearInput.value.value = logined.value.year;
+      phoneInput.value.value = logined.value.phon || "";
+      emailInput.value.value = logined.value.email || "";
       majorInput.value.value = logined.value.hakbu || "";
       clubInput.value.value = logined.value.clud || "";
       infoInput.value.value = logined.value.info || "";
@@ -143,13 +240,20 @@ export default {
     });
 
     return {
+      changed,
+      passworded,
       profileImage,
+      profileImageChanged,
       nameInput,
       idInput,
       yearInput,
+      phoneInput,
+      emailInput,
       majorInput,
       clubInput,
       infoInput,
+      passwordInput,
+      submit,
     };
   },
 };

@@ -1,9 +1,11 @@
+import { ref } from "vue";
+
 import useAPI from "./useAPI";
 
 import dummyNotices from "@/dummys/notice";
 
 export default function useBoard() {
-  const { get } = useAPI().request;
+  const { get, post } = useAPI().request;
 
   const test = (params) => {
     return new Promise(async (resolve, reject) => {
@@ -11,20 +13,84 @@ export default function useBoard() {
     });
   };
 
-  const getNotice = (idx) => {
-    idx = parseInt(idx);
+  const getNews = (idx) => {
+    if (idx) {
+      idx = parseInt(idx);
+    }
+
     return new Promise(async (resolve, reject) => {
-      const item = dummyNotices
-        .fetched(dummyNotices.content, dummyNotices.user)
-        .find((d) => {
+      const notices = dummyNotices.fetched(
+        dummyNotices.content,
+        dummyNotices.user
+      );
+
+      if (idx) {
+        notices.find((d) => {
           return d.content_id === idx;
         });
-      resolve(item);
+
+        resolve(item);
+      } else {
+        resolve(notices);
+      }
+
       return;
     });
   };
 
+  const category = ref(null);
+  const fetchCategory = () => {
+    return new Promise(async (resolve, reject) => {
+      const response = await get("/common/category");
+
+      console.log(response);
+      noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
+      category.value = response;
+
+      resolve(response);
+    });
+  };
+
+  const noticeIdx = ref(null);
+  const fetchNotices = (idx) => {
+    return new Promise(async (resolve, reject) => {
+      if (!noticeIdx.value) {
+        await fetchCategory();
+      }
+
+      const params = {
+        board_id: noticeIdx.value,
+        offset: idx,
+      };
+
+      console.log(JSON.stringify(params));
+      const response = await get("/common/board", params);
+
+      console.log(response);
+      if (!response.state) {
+        return;
+      }
+
+      resolve(response.data);
+    });
+  };
+
+  const addQuestion = (params) => {
+    return new Promise(async (resolve, reject) => {
+      const result = await post("/common/question/add", params);
+
+      console.log(result);
+
+      result.message = result.state ? result.success : result.error;
+
+      resolve(result);
+    });
+  };
+
   return {
-    getNotice,
+    category,
+    fetchCategory,
+    fetchNotices,
+    addQuestion,
   };
 }

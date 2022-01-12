@@ -114,7 +114,7 @@ export default {
       });
 
       if (!result.state) {
-        alert(result.error.message);
+        alert(result.message);
       } else {
         if (result.state) {
           router.push({ name: "Home" });
