@@ -325,9 +325,7 @@ export default {
       fetchEventList();
       const result = await fetchNotices();
 
-      console.log(result);
       notices.value = result[0].child;
-      console.log("notices", notices.value);
     });
 
     watch(logined, () => {

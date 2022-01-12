@@ -43,7 +43,6 @@ export default function useBoard() {
     return new Promise(async (resolve, reject) => {
       const response = await get("/common/category");
 
-      console.log(response);
       noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
       category.value = response;
 
@@ -63,10 +62,8 @@ export default function useBoard() {
         offset: idx,
       };
 
-      console.log(JSON.stringify(params));
       const response = await get("/common/board", params);
 
-      console.log(response);
       if (!response.state) {
         return;
       }
@@ -78,8 +75,6 @@ export default function useBoard() {
   const addQuestion = (params) => {
     return new Promise(async (resolve, reject) => {
       const result = await post("/common/question/add", params);
-
-      console.log(result);
 
       result.message = result.state ? result.success : result.error;
 

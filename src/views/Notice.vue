@@ -80,7 +80,6 @@ export default {
     onMounted(async () => {
       const result = await fetchNotices(page.value);
       items.value = result[0].child;
-      console.log(items.value);
     });
 
     return {

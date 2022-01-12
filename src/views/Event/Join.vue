@@ -458,8 +458,6 @@ export default {
         result.existFiles = existFiles;
       }
 
-      console.log(result);
-
       return result;
     });
 
@@ -596,25 +594,23 @@ export default {
     const checkJoinedData = (data) => {
       const joined = data.joined;
 
-      nameInput.value.initial = logined.value.name || "";
-      idInput.value.initial = logined.value.user_id || "";
-      yearInput.value.initial = logined.value.year || "";
-      emailInput.value.initial = logined.value.email || "";
-      phoneInput.value.initial = logined.value.phon || "";
+      nameInput.value.value = logined.value.name || "";
+      idInput.value.value = logined.value.user_id || "";
+      yearInput.value.value = logined.value.year || "";
+      emailInput.value.value = logined.value.email || "";
+      phoneInput.value.value = logined.value.phon || "";
 
       if (joined) {
         const { name, year, email, phone, etc, filePath } = joined;
 
-        nameInput.value.initial = name;
-        idInput.value.initial = parseInt(logined.value.user_id);
-        yearInput.value.initial = parseInt(year);
-        emailInput.value.initial = email;
-        phoneInput.value.initial = phone;
-        etcInput.value.initial = etc;
+        nameInput.value.value = name;
+        idInput.value.value = parseInt(logined.value.user_id);
+        yearInput.value.value = parseInt(year);
+        emailInput.value.value = email;
+        phoneInput.value.value = phone;
+        etcInput.value.value = etc;
         changedByLoadedData = true;
         content.value = joined.content;
-
-        console.log(idInput.value);
 
         return JSON.parse(filePath);
       }

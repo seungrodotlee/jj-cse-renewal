@@ -47,7 +47,6 @@ export default {
       const list = await board[`fetch${casedBoard}`]();
 
       data.value = list[0].child.find((c) => (c.id = route.params.idx));
-      console.log(data.value);
     };
 
     onMounted(() => {

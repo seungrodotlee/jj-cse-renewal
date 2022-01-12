@@ -88,9 +88,8 @@ export default function useAuth() {
 
   const updateProfile = (params) => {
     return new Promise(async (resolve, reject) => {
-      console.log(params);
       const result = await post("/auth/profile", params);
-      console.log(result);
+
       resolve(result);
     });
   };

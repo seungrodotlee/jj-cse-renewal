@@ -46,8 +46,6 @@ export default function useInput() {
       },
     });
 
-    console.log(input.value);
-
     return input;
   };
 
