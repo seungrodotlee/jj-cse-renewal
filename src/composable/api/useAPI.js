@@ -36,8 +36,8 @@ export default function useAPI() {
                 const innerKeys = Object.keys(data[key]);
 
                 innerKeys.forEach((innerKey) => {
-                  form.append(key + `[${innerKey}]`, data[key][innerKey]);
-                  // form.append(key + `[]`, data[key][innerKey]);
+                  // form.append(key + `[${innerKey}]`, data[key][innerKey]);
+                  form.append(key + `[]`, data[key][innerKey]);
                   // form.append(key, data[key][innerKey]);
                 });
               } else {
@@ -46,9 +46,9 @@ export default function useAPI() {
             });
           }
 
-          form.forEach((v, k) => {
-            // console.log(`${k}:`, v);
-          });
+          // form.forEach((v, k) => {
+          //   console.log(`${k}:`, v);
+          // });
 
           const response = await axios.post(domain + url, form, {
             withCredentials: true,
@@ -56,6 +56,10 @@ export default function useAPI() {
               "Content-type": "multipart/form-data",
             },
           });
+
+          if (response.data.code && response.data.error === "파일 에러") {
+            response.data.error = "2MB가 넘는 파일은 업로드 할 수 없습니다.";
+          }
 
           resolve(response.data);
         } catch (e) {

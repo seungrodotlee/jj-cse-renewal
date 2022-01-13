@@ -6,6 +6,7 @@ import Article from "../views/Article.vue";
 import JoinEvent from "../views/Event/Join.vue";
 import EventList from "../views/Event/List.vue";
 import Profile from "../views/Profile.vue";
+import Test from "../views/Test.vue";
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: Profile,
+  },
+  {
+    path: "/test",
+    name: "Test",
+    component: Test,
   },
 ];
 
