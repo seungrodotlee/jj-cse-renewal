@@ -5,7 +5,6 @@ const resolveSrc = (_path) => {
 };
 
 module.exports = {
-  publicPath: "/jj-cse-renewal/",
   configureWebpack: {
     devServer: {
       host: "test.jj-cse.online",

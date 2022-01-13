@@ -222,13 +222,13 @@ export default {
       if (result.state) {
         alert(result.message);
       } else {
-        alert(result.error);
+        alert(result.error.message);
       }
     };
 
     const fillInUserInfo = () => {
       profileImage.value = logined.value.imagePath
-        ? "https://jj-cse.online" + logined.value.imagePath
+        ? "https://jj-cse.online" + logined.value.imagePath[0]
         : "https://via.placeholder.com/500x500/FFFFFF/CED4DA?text=NO+PROFILE";
       nameInput.value.initial = logined.value.name;
       idInput.value.initial = logined.value.user_id;

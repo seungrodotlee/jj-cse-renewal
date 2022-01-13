@@ -455,7 +455,11 @@ export default {
       const existFiles = checkJoinedData(result);
 
       if (existFiles) {
-        result.existFiles = existFiles;
+        if (typeof existFiles === "string") {
+          result.existFiles = [existFiles];
+        } else {
+          result.existFiles = existFiles;
+        }
       }
 
       return result;
@@ -538,7 +542,7 @@ export default {
 
     const eventFileEl = ref(null);
 
-    const eventFileList = ref(null);
+    let eventFileList = null;
     const eventFile = ref(null);
 
     const eventFileChanged = (e) => {
@@ -546,10 +550,10 @@ export default {
       const files = Array.from(e.target.files);
       let fileList = files.map((f) => f.name);
 
+      eventFileList = eventFileList || [];
       eventFile.value = eventFile.value || [];
-      eventFileList.value = eventFileList.value || [];
       eventFile.value = [...eventFile.value, ...fileList];
-      eventFileList.value = [...eventFileList.value, ...files];
+      eventFileList = [...eventFileList, ...e.target.files];
     };
 
     const privacyChecked = ref(false);
@@ -566,8 +570,8 @@ export default {
         content: content.value,
       };
 
-      if (eventFileList.value) {
-        params.fileArray = eventFileList.value;
+      if (eventFileList) {
+        params.fileArray = eventFileList;
       }
 
       let result;

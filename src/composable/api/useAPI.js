@@ -37,12 +37,18 @@ export default function useAPI() {
 
                 innerKeys.forEach((innerKey) => {
                   form.append(key + `[${innerKey}]`, data[key][innerKey]);
+                  // form.append(key + `[]`, data[key][innerKey]);
+                  // form.append(key, data[key][innerKey]);
                 });
               } else {
                 form.append(key, data[key]);
               }
             });
           }
+
+          form.forEach((v, k) => {
+            // console.log(`${k}:`, v);
+          });
 
           const response = await axios.post(domain + url, form, {
             withCredentials: true,

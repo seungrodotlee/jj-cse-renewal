@@ -16,12 +16,21 @@ export default function useAuth() {
       try {
         const authCheck = await post("/authCheck");
 
+        console.log("auth check", authCheck.data);
+
         if (!authCheck.data) {
           resolve(null);
           return;
         }
 
         const result = await post("/me");
+        console.log(result);
+
+        result.data.imagePath = JSON.parse(
+          result.data.imagePath.replace("”", '"')
+        );
+
+        console.log("me", result.data);
 
         resolve(result.data);
       } catch (e) {
@@ -43,6 +52,12 @@ export default function useAuth() {
         });
         return;
       } else {
+        if (!params) {
+          resolve({
+            state: false,
+          });
+        }
+
         const result = await post("/login", params);
 
         if (result.state) {

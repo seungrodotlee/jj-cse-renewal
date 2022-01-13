@@ -81,14 +81,20 @@
     </section>
     <section class="px-4 sm:px-0 slider-section container mx-auto mb-4">
       <carousel
-        v-if="eventList"
+        v-if="showEventCarousel"
         :items-to-show="carouselImageShow"
         :wrap-around="true"
         :snap-align="'start'"
         class="w-full text-left"
       >
-        <slide v-for="(e, i) in eventList" :key="i" class="lg:pr-4">
-          <div class="flex flex-col h-full px-4 py-4 bg-gray-200 rounded-xl">
+        <slide
+          v-for="(e, i) in eventList"
+          :key="i"
+          :class="i < eventList.length - 1 ? 'lg:pr-4' : ''"
+        >
+          <div
+            class="flex flex-col h-full w-full px-4 py-4 bg-gray-200 rounded-xl"
+          >
             <p
               class="
                 self-start
@@ -200,8 +206,6 @@ export default {
     const { eventList, fetchEventList } = useEvent();
     const { fetchCategory, fetchNotices, addQuestion } = useBoard();
 
-    const carouselImageShow = ref(window.innerWidth > 1024 ? 2.5 : 1);
-
     const carouselCurrentIdx = ref(0);
     const carouselImages = ref([
       {
@@ -222,48 +226,6 @@ export default {
       return carouselImages.value[carouselCurrentIdx.value].src;
     });
 
-    // const notices = ref([
-    //   {
-    //     title: "공지사항 1",
-    //     content: `
-    //       국회의원이 회기전에 체포 또는 구금된 때에는
-    //       현행범인이 아닌 한 국회의 요구가 있으면 회기중 석방된다.
-    //       국군의 조직과 편성은 법률로 정한다.
-    //       모든 국민은 근로의 의무를 진다.
-    //       국가는 근로의 의무의 내용과 조건을 민주주의원칙에 따라 법률로 정한다.
-    //     `,
-    //     datetime: "2021-10-10",
-    //   },
-    //   {
-    //     title: "공지사항 2",
-    //     content: `
-    //       대통령의 임기는 5년으로 하며, 중임할 수 없다.
-    //       교육의 자주성·전문성·정치적 중립성 및 대학의 자율성은
-    //       법률이 정하는 바에 의하여 보장된다.
-    //       대법원장은 국회의 동의를 얻어 대통령이 임명한다.
-    //       모든 국민은 그 보호하는 자녀에게 적어도
-    //       초등교육과 법률이 정하는 교육을 받게 할 의무를 진다.
-    //       언론·출판에 대한 허가나 검열과
-    //       집회·결사에 대한 허가는 인정되지 아니한다.
-    //     `,
-    //     datetime: "2022-01-01",
-    //   },
-    //   {
-    //     title: "공지사항 3",
-    //     content: `
-    //       내용 3
-    //     `,
-    //     datetime: "2022-01-02",
-    //   },
-    //   {
-    //     title: "공지사항 4",
-    //     content: `
-    //       내용 4
-    //     `,
-    //     datetime: "2022-01-03",
-    //   },
-    // ]);
-
     onMounted(() => {
       setInterval(() => {
         if (carouselCurrentIdx.value + 1 >= carouselImages.value.length) {
@@ -273,6 +235,20 @@ export default {
 
         carouselCurrentIdx.value++;
       }, 2500);
+    });
+
+    const showEventCarousel = ref(false);
+    const carouselImageShow = ref(null);
+
+    const setCarouselCellSize = (list) => {
+      const cell = list.length > 2 ? 2.5 : list.length;
+
+      carouselImageShow.value = window.innerWidth > 1024 ? cell : 1;
+      showEventCarousel.value = true;
+    };
+
+    watch(eventList, (to) => {
+      setCarouselCellSize(to);
     });
 
     const notices = ref(null);
@@ -322,10 +298,15 @@ export default {
 
     onMounted(async () => {
       await fetchCategory();
-      fetchEventList();
-      const result = await fetchNotices();
 
+      const result = await fetchNotices();
       notices.value = result[0].child;
+
+      if (eventList.value) {
+        setCarouselCellSize();
+      } else {
+        fetchEventList();
+      }
     });
 
     watch(logined, () => {
@@ -333,6 +314,7 @@ export default {
     });
 
     return {
+      showEventCarousel,
       carouselImageShow,
       carouselImages,
       currentCarousel,
