@@ -1,11 +1,13 @@
 import { ref } from "vue";
 
 import useAPI from "./useAPI";
+import useAuth from "./useAuth";
 
 import dummyNotices from "@/dummys/notice";
 
 export default function useBoard() {
   const { get, post } = useAPI().request;
+  const { logined } = useAuth();
 
   const test = (params) => {
     return new Promise(async (resolve, reject) => {
@@ -41,14 +43,27 @@ export default function useBoard() {
   const category = ref(null);
   const fetchCategory = (isAdmin = false) => {
     return new Promise(async (resolve, reject) => {
-      // const uri = "/common/category" + (isAdmin ? "/admin" : "");
-      const uri = "/common/category";
-      const response = await get(uri);
+      const uri = "/common/category" + (isAdmin ? "/admin" : "");
+      // const uri = "/common/category";
 
-      noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
-      category.value = response;
+      console.log(uri, logined.value);
+      let response = await get(uri);
 
-      resolve(response);
+      console.log(response);
+
+      if (response.error) {
+        alert("카테고리 조회 실패: " + response.error.message);
+        alert("일반 카테고리 목록을 불러옵니다");
+        response = await get("/common/category");
+      }
+
+      if (!isAdmin) {
+        noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
+        category.value = response;
+      }
+
+        resolve(response.one);
+      
     });
   };
 
