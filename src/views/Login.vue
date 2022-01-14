@@ -155,6 +155,8 @@ export default {
         pw: passwordInputReg.value.value,
       });
 
+      console.log("login result", result);
+
       if (!result.state) {
         alert(result.error.message);
       } else {

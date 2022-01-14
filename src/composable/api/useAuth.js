@@ -24,13 +24,12 @@ export default function useAuth() {
         }
 
         const result = await post("/me");
-        console.log(result);
 
-        result.data.imagePath = JSON.parse(
-          result.data.imagePath.replace("”", '"')
-        );
-
-        console.log("me", result.data);
+        if (result.data.imagePath) {
+          result.data.imagePath = JSON.parse(
+            result.data.imagePath.replace("”", '"')
+          );
+        }
 
         resolve(result.data);
       } catch (e) {
