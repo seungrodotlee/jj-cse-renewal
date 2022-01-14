@@ -39,9 +39,11 @@ export default function useBoard() {
   };
 
   const category = ref(null);
-  const fetchCategory = () => {
+  const fetchCategory = (isAdmin = false) => {
     return new Promise(async (resolve, reject) => {
-      const response = await get("/common/category");
+      // const uri = "/common/category" + (isAdmin ? "/admin" : "");
+      const uri = "/common/category";
+      const response = await get(uri);
 
       noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
       category.value = response;

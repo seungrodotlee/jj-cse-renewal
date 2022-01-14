@@ -94,6 +94,7 @@ import { XIcon } from "@heroicons/vue/outline";
 
 import DynamicInput from "@/components/Form/DynamicInput.vue";
 
+import useAuth from "@/composable/api/useAuth";
 import useBoard from "@/composable/api/useBoard";
 import useInput from "@/composable/Form/useInput";
 
@@ -106,6 +107,7 @@ export default {
   setup() {
     const router = useRouter();
 
+    const { logined } = useAuth();
     const { fetchCategory, writeBoard } = useBoard();
     const { generate } = useInput();
 
@@ -116,10 +118,13 @@ export default {
       placeholder: "제목을 입력해주세요",
     });
 
-    onMounted(async () => {
-      const result = await fetchCategory();
+    const getCatogoryList = async () => {
+      const result = await fetchCategory(true);
+
+      console.log(result);
 
       result.forEach((r) => {
+        category.value.push(r);
         if (r.child.length > 0) {
           r.child.forEach((c) => {
             category.value.push(c);
@@ -128,6 +133,16 @@ export default {
       });
 
       console.log(category.value);
+    };
+
+    onMounted(() => {
+      if (logined.value) {
+        getCatogoryList();
+      }
+    });
+
+    watch(logined, () => {
+      getCatogoryList();
     });
 
     watch(selectedCategory, (to) => console.log(to));
