@@ -226,6 +226,7 @@ export default {
 
       if (result.state) {
         alert(result.message);
+        location.reload();
       } else {
         alert(result.error.message);
       }
