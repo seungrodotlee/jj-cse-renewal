@@ -1,4 +1,5 @@
 import axios from "axios";
+import qs from "qs";
 import { isVNode } from "vue";
 
 export default function useAPI() {
