@@ -62,16 +62,19 @@
       <dynamic-input
         class="col-start-1 col-end-3"
         :data="nameInput"
+        :disabled="true"
         @update="nameInput.onUpdate"
       />
       <dynamic-input
         class="col-start-3 col-end-4"
         :data="idInput"
+        :disabled="true"
         @update="idInput.onUpdate"
       />
       <dynamic-input
         class="col-start-4 col-end-5"
         :data="yearInput"
+        :disabled="true"
         @update="yearInput.onUpdate"
       />
       <dynamic-input

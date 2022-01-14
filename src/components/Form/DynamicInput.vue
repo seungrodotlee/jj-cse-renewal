@@ -114,7 +114,7 @@ export default {
     isSmall: Boolean,
     disabled: Boolean,
   },
-  emits: ["enter"],
+  emits: ["enter", "update"],
   setup(props, { emit }) {
     const { disabled, data } = toRefs(props);
     const { errored, value, validator, initial } = toRefs(data.value);
@@ -159,7 +159,7 @@ export default {
       } else {
         if (updateFromOriginChange) {
           updateFromOriginChange = false;
-          // return;
+          return;
         }
 
         emit("update", "value", to);

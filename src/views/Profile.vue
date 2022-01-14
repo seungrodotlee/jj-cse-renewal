@@ -213,9 +213,14 @@ export default {
         phon: phoneInput.value.value,
         email: emailInput.value.value,
         info: infoInput.value.value,
-        fileArray: profileImageFiles,
         password: passwordInput.value.value,
       };
+
+      if (profileImageFiles) {
+        params.fileArray = profileImageFiles;
+      }
+
+      console.log(params);
 
       const result = await updateProfile(params);
 
