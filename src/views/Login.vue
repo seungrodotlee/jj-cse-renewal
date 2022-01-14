@@ -9,12 +9,14 @@
         class="flex-grow mb-4"
         :data="idInput"
         @update="idInput.onUpdate"
+        @enter="enterPressed"
       />
       <dynamic-input
         class="flex-grow mb-4"
         :inputType="'password'"
         :data="passwordInput"
         @update="passwordInput.onUpdate"
+        @enter="enterPressed"
       />
       <button
         class="py-4 rounded-xl bg-primary text-white mb-4"
@@ -103,9 +105,17 @@ export default {
     const passwordInput = generate({
       placeholder: "비밀번호",
       errorCondition: (data) => {
+        if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g.test(data)) {
+          return "한글은 입력할 수 없습니다!";
+        }
+
         if (data.length === 0) return "비밀번호를 입력해주세요!";
       },
     });
+
+    const enterPressed = () => {
+      tryLogin();
+    };
 
     const tryLogin = async () => {
       const result = await login({
@@ -168,6 +178,7 @@ export default {
       router,
       idInput,
       passwordInput,
+      enterPressed,
       tryLogin,
       showRegistryPopup,
       idInputReg,

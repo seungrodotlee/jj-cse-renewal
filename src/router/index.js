@@ -6,6 +6,7 @@ import Article from "../views/Article.vue";
 import JoinEvent from "../views/Event/Join.vue";
 import EventList from "../views/Event/List.vue";
 import Profile from "../views/Profile.vue";
+import WriteArticle from "../views/WriteArticle.vue";
 
 const routes = [
   {
@@ -29,9 +30,14 @@ const routes = [
     component: Notice,
   },
   {
-    path: "/article/:board/:idx",
+    path: "/article/:idx",
     name: "Article",
     component: Article,
+  },
+  {
+    path: "/write/article",
+    name: "WriteArticle",
+    component: WriteArticle,
   },
   {
     path: "/event/join/:idx",

@@ -53,9 +53,11 @@
               : '',
             disabled ? 'bg-gray-100' : 'bg-white',
           ]"
-          v-model="valueBind"
+          :value="valueBind"
+          @keyup="keyup"
           @focus="toggleFocus(true)"
           @blur="toggleFocus(false)"
+          @keyup.enter="emit('enter')"
         />
         <textarea
           v-if="isTextArea"
@@ -77,7 +79,7 @@
           v-model="valueBind"
           @focus="toggleFocus(true)"
           @blur="toggleFocus(false)"
-          @keydown="resizeTextarea($event)"
+          @keyup="resizeTextarea($event)"
         />
       </div>
     </div>
@@ -112,10 +114,12 @@ export default {
     isSmall: Boolean,
     disabled: Boolean,
   },
+  emits: ["enter"],
   setup(props, { emit }) {
     const { disabled, data } = toRefs(props);
     const { errored, value, validator, initial } = toRefs(data.value);
 
+    const inputElement = ref(null);
     const isFocused = ref(false);
     const isErrored = ref(false);
     const valueBind = ref(initial.value || value.value);
@@ -134,6 +138,10 @@ export default {
       isFocused.value = value;
 
       emit("update", "focused", isFocused.value);
+    };
+
+    const keyup = (e) => {
+      valueBind.value = e.target.value;
     };
 
     const resizeTextarea = (e) => {
@@ -168,11 +176,14 @@ export default {
     });
 
     return {
+      emit,
+      inputElement,
       isErrored,
       isFocused,
       valueBind,
       inputDynamicStyles,
       toggleFocus,
+      keyup,
       resizeTextarea,
     };
   },

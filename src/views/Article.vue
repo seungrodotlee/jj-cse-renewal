@@ -35,18 +35,16 @@ import useBoard from "@/composable/api/useBoard";
 export default {
   setup() {
     const route = useRoute();
-    const board = useBoard();
+    const { fetchArticle } = useBoard();
 
     const data = ref({});
 
     const fetchData = async () => {
-      const casedBoard = route.params.board.replace(/(^[a-z]|-[a-z])/g, (g) => {
-        return g.replace("-", "").toUpperCase();
-      });
+      const result = await fetchArticle(route.params.idx);
 
-      const list = await board[`fetch${casedBoard}`]();
+      console.log(result);
 
-      data.value = list[0].child.find((c) => (c.id = route.params.idx));
+      data.value = result;
     };
 
     onMounted(() => {

@@ -72,6 +72,22 @@ export default function useBoard() {
     });
   };
 
+  const fetchArticle = (idx) => {
+    return new Promise(async (resolve, reject) => {
+      const response = await get("/common/board/id/" + idx);
+
+      if (response.data) resolve(response.data);
+    });
+  };
+
+  const writeBoard = (params) => {
+    return new Promise(async (resolve, reject) => {
+      const response = await post("/common/board/write", params);
+
+      resolve(response);
+    });
+  };
+
   const addQuestion = (params) => {
     return new Promise(async (resolve, reject) => {
       const result = await post("/common/question/add", params);
@@ -86,6 +102,8 @@ export default function useBoard() {
     category,
     fetchCategory,
     fetchNotices,
+    fetchArticle,
+    writeBoard,
     addQuestion,
   };
 }
