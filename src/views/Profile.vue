@@ -214,6 +214,7 @@ export default {
         email: emailInput.value.value,
         info: infoInput.value.value,
         password: passwordInput.value.value,
+        clud: clubInput.value.value,
       };
 
       if (profileImageFiles) {

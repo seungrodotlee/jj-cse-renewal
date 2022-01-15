@@ -58,12 +58,11 @@ export default function useBoard() {
       }
 
       if (!isAdmin) {
-        noticeIdx.value = response.find((c) => c.cateNm === "공지사항").id;
+        noticeIdx.value = response.one.find((c) => c.cateNm === "공지사항").id;
         category.value = response;
       }
 
-        resolve(response.one);
-      
+      resolve(response.one);
     });
   };
 
