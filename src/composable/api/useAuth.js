@@ -77,8 +77,9 @@ export default function useAuth() {
   const logout = async (params) => {
     const result = await get("/logout");
 
-    if (result.state) {
+    if (result.data) {
       store.commit("setUserInfo", null);
+      alert("안전하게 로그아웃하였습니다!");
       router.push({ name: "Home" });
     } else {
       alert(result.error.message);

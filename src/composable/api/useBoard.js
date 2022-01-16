@@ -9,47 +9,12 @@ export default function useBoard() {
   const { get, post } = useAPI().request;
   const { logined } = useAuth();
 
-  const test = (params) => {
-    return new Promise(async (resolve, reject) => {
-      const result = await get("/board/noticeList", params);
-    });
-  };
-
-  const getNews = (idx) => {
-    if (idx) {
-      idx = parseInt(idx);
-    }
-
-    return new Promise(async (resolve, reject) => {
-      const notices = dummyNotices.fetched(
-        dummyNotices.content,
-        dummyNotices.user
-      );
-
-      if (idx) {
-        notices.find((d) => {
-          return d.content_id === idx;
-        });
-
-        resolve(item);
-      } else {
-        resolve(notices);
-      }
-
-      return;
-    });
-  };
-
   const category = ref(null);
   const fetchCategory = (isAdmin = false) => {
     return new Promise(async (resolve, reject) => {
       const uri = "/common/category" + (isAdmin ? "/admin" : "");
-      // const uri = "/common/category";
 
-      console.log(uri, logined.value);
       let response = await get(uri);
-
-      console.log(response);
 
       if (response.error) {
         alert("카테고리 조회 실패: " + response.error.message);
@@ -58,7 +23,11 @@ export default function useBoard() {
       }
 
       if (!isAdmin) {
-        noticeIdx.value = response.one.find((c) => c.cateNm === "공지사항").id;
+        const children = response.one.find(
+          (c) => c.cateNm === "공지사항"
+        ).child;
+        noticeIdx.value = children.find((cd) => cd.cateNm === "학생회 공지").id;
+        newsIdx.value = children.find((cd) => cd.cateNm === "학과공지").id;
         category.value = response;
       }
 
@@ -75,10 +44,43 @@ export default function useBoard() {
 
       const params = {
         board_id: noticeIdx.value,
-        offset: idx,
       };
 
+      if (idx) {
+        params.offset = idx;
+      }
+
+      console.log("notice params", params);
       const response = await get("/common/board", params);
+      console.log("notice response", response);
+
+      if (!response.state) {
+        resolve(null);
+        return;
+      }
+
+      resolve(response.data);
+    });
+  };
+
+  const newsIdx = ref(null);
+  const fetchNews = (idx) => {
+    return new Promise(async (resolve, reject) => {
+      if (!newsIdx.value) {
+        await fetchCategory();
+      }
+
+      const params = {
+        board_id: newsIdx.value,
+      };
+
+      if (idx) {
+        params.offset = idx;
+      }
+
+      console.log("news params", params);
+      const response = await get("/common/board", params);
+      console.log("news response", response);
 
       if (!response.state) {
         return;
@@ -118,6 +120,7 @@ export default function useBoard() {
     category,
     fetchCategory,
     fetchNotices,
+    fetchNews,
     fetchArticle,
     writeBoard,
     addQuestion,

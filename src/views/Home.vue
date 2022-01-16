@@ -204,7 +204,7 @@ export default {
     const { logined } = useAuth();
     const { generate } = useInput();
     const { eventList, fetchEventList } = useEvent();
-    const { fetchCategory, fetchNotices, addQuestion } = useBoard();
+    const { fetchCategory, fetchNotices, fetchNews, addQuestion } = useBoard();
 
     const carouselCurrentIdx = ref(0);
     const carouselImages = ref([
@@ -252,6 +252,7 @@ export default {
     });
 
     const notices = ref(null);
+    const news = ref(null);
 
     const titleInput = generate({
       placeholder: "제목",
@@ -299,8 +300,14 @@ export default {
     onMounted(async () => {
       await fetchCategory();
 
-      const result = await fetchNotices();
-      notices.value = result[0].child;
+      let result = await fetchNotices();
+      console.log("notice", result);
+      if (result) {
+        notices.value = result[0].child;
+      }
+
+      result = await fetchNews();
+      console.log("news", result);
 
       if (eventList.value) {
         setCarouselCellSize();
