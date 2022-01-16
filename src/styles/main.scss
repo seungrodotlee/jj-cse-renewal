@@ -55,4 +55,8 @@ a.disabled {
   @apply bg-gray-200 text-gray-600 pointer-events-none;
 }
 
+.ql-align-center img {
+  @apply mx-auto;
+}
+
 @import "./animations.scss";
