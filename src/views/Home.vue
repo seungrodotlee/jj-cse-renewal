@@ -18,10 +18,10 @@
           flex-shrink-0
         "
       >
-        CS Notice
+        CSE Notice
       </div>
-      <div class="flex-grow w-full flex bg-primary p-1">
-        <div class="flex flex-col w-1/2 bg-white py-4 mr-1">
+      <div class="flex-grow w-full flex flex-col sm:flex-row bg-primary p-1">
+        <div class="flex flex-col bg-white py-4 mr-1">
           <p
             class="
               self-start
@@ -61,7 +61,7 @@
             </slide>
           </carousel>
         </div>
-        <div class="flex w-1/2 bg-white py-4">
+        <div class="flex bg-white py-4">
           <p
             class="
               self-start

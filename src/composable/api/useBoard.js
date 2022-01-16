@@ -100,7 +100,7 @@ export default function useBoard() {
 
   const writeBoard = (params) => {
     return new Promise(async (resolve, reject) => {
-      const response = await post("/common/board/write", params);
+      const response = await post("/imsi/admin/writer", params);
 
       resolve(response);
     });

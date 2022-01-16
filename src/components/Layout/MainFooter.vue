@@ -1,5 +1,5 @@
 <template>
-  <section class="w-full bg-gray-200">
+  <section class="w-full bg-gray-200 px-4 sm:px-0">
     <div class="container mx-auto py-8">
       <p>[55069] 전라북도 전주시 완산구 천잠로 303 공학1관 208호</p>
       <p class="mb-16">
