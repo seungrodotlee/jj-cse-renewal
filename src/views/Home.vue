@@ -5,7 +5,7 @@
       class="banner-carousel container mx-auto mb-4 overflow-hidden"
       :wrap-around="true"
     >
-      <slide v-for="b in banners" :key="b.id" style="height: 600px">
+      <slide v-for="b in banners" :key="b.id" style="max-height: 600px">
         <a class="flex-center w-full h-full" :href="b.link">
           <img
             class="w-full h-full object-contain"
@@ -122,7 +122,7 @@
       :class="
         displayedEventList && displayedEventList.length > 1
           ? 'w-full'
-          : 'w-full md:w-2/3'
+          : 'w-full xl:w-2/3'
       "
     >
       <carousel
