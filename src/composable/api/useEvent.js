@@ -41,6 +41,12 @@ export default function useEvent() {
       color = "red";
     }
 
+    if (data.periodFl === 0) {
+      status = "상시";
+      color = "blue";
+      enabled = true;
+    }
+
     return {
       enabled,
       color,
@@ -73,8 +79,14 @@ export default function useEvent() {
 
     const pack = result.data;
 
+    //console.log("event", pack);
+
     for (let i in pack) {
       const p = pack[i];
+
+      if (p.eventFl === 0) {
+        pack.splice(i, 1);
+      }
 
       if (logined.value) {
         const joined = await checkEventJoined({

@@ -153,11 +153,19 @@ export default {
     const passwordInputReg = generate({
       placeholder: "비밀번호",
       errorCondition: (data) => {
+        if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g.test(data)) {
+          return "한글은 입력할 수 없습니다!";
+        }
+
         if (data.length === 0) return "비밀번호를 입력해주세요!";
       },
     });
 
     const privacyChecked = ref(false);
+
+    const enterPressedReg = () => {
+      tryRegistry();
+    };
 
     const tryRegistry = async () => {
       const result = await register({
@@ -165,7 +173,12 @@ export default {
         pw: passwordInputReg.value.value,
       });
 
-      console.log("login result", result);
+      if (!privacyChecked.value) {
+        alert("개인정보 활용에 동의해주세요!");
+        return;
+      }
+
+      //console.log("login result", result);
 
       if (!result.state) {
         alert(result.error.message);
@@ -184,6 +197,7 @@ export default {
       idInputReg,
       passwordInputReg,
       privacyChecked,
+      enterPressedReg,
       tryRegistry,
     };
   },

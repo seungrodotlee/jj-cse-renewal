@@ -4,7 +4,10 @@
       <router-link to="/" class="flex items-center">
         <img :src="require('/src/assets/img/main-logo.png')" />
       </router-link>
-      <div class="nav-menus flex text-sm">
+      <div class="flex justify-center items-center sm:hidden">
+        <menu-icon class="h-12 p-2" @click="showMenus = true" />
+      </div>
+      <div class="nav-menus hidden sm:flex text-sm">
         <router-link :to="{ name: 'Notice', params: { page: 1 } }"
           >공지사항</router-link
         >
@@ -19,19 +22,56 @@
         >
       </div>
     </div>
+    <div
+      v-if="showMenus"
+      class="
+        flex-center flex-col
+        text-xl
+        fixed
+        top-0
+        left-0
+        w-full
+        h-full
+        bg-white
+      "
+    >
+      <router-link class="mb-2" :to="{ name: 'Notice', params: { page: 1 } }"
+        >공지사항</router-link
+      >
+      <router-link class="mb-2" :to="{ name: 'EventList' }"
+        >학과 이벤트</router-link
+      >
+      <!-- <router-link to="/">커뮤니티</router-link> -->
+      <router-link class="mb-2" v-if="!logined" :to="{ name: 'Login' }"
+        >로그인</router-link
+      >
+      <button v-else class="mb-2" @click="logout">로그아웃</button>
+      <router-link v-if="logined" :to="{ name: 'Profile' }">프로필</router-link>
+      <x-icon class="absolute top-4 right-4 h-8" @click="showMenus = false" />
+    </div>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { MenuIcon, XIcon } from "@heroicons/vue/outline";
+
 import useAuth from "@/composable/api/useAuth";
 
 export default {
+  components: {
+    MenuIcon,
+    XIcon,
+  },
   setup() {
     const { logined, logout } = useAuth();
+
+    const showMenus = ref(false);
 
     return {
       logined,
       logout,
+      showMenus,
     };
   },
 };

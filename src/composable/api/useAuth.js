@@ -16,7 +16,7 @@ export default function useAuth() {
       try {
         const authCheck = await post("/authCheck");
 
-        console.log("auth check", authCheck.data);
+        //console.log("auth check", authCheck.data);
 
         if (!authCheck.data) {
           resolve(null);

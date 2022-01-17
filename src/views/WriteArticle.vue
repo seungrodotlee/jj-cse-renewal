@@ -121,7 +121,7 @@ export default {
     const getCatogoryList = async () => {
       const result = await fetchCategory(true);
 
-      console.log(result);
+      //console.log(result);
 
       result.forEach((r) => {
         category.value.push(r);
@@ -132,7 +132,7 @@ export default {
         }
       });
 
-      console.log(category.value);
+      //console.log(category.value);
     };
 
     onMounted(() => {
@@ -145,7 +145,7 @@ export default {
       getCatogoryList();
     });
 
-    watch(selectedCategory, (to) => console.log(to));
+    //watch(selectedCategory, (to) => console.log(to));
 
     const content = ref("");
 
@@ -172,7 +172,7 @@ export default {
 
       const result = await writeBoard(params);
 
-      console.log(result);
+      //console.log(result);
 
       if (result.state) {
         alert("글을 성공적으로 작성하였습니다");

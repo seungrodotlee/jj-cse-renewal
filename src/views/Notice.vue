@@ -68,6 +68,45 @@ export default {
       },
     ]);
 
+    if (window.innerWidth < 1024) {
+      fields.value = [
+        {
+          key: "title",
+          label: "제목",
+        },
+      ];
+    }
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth < 1024) {
+        fields.value = [
+          {
+            key: "title",
+            label: "제목",
+          },
+        ];
+      } else {
+        fields.value = [
+          {
+            key: "id",
+            label: "번호",
+          },
+          {
+            key: "title",
+            label: "제목",
+          },
+          {
+            key: "writer",
+            label: "글쓴이",
+          },
+          {
+            key: "created_at",
+            label: "작성일",
+          },
+        ];
+      }
+    });
+
     const items = ref(null);
 
     const selectItem = (item) => {

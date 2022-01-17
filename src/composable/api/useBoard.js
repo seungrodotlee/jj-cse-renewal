@@ -43,16 +43,16 @@ export default function useBoard() {
       }
 
       const params = {
-        board_id: noticeIdx.value,
+        cate_id: noticeIdx.value,
       };
 
       if (idx) {
         params.offset = idx;
       }
 
-      console.log("notice params", params);
-      const response = await get("/common/board", params);
-      console.log("notice response", response);
+      //console.log("notice params", params);
+      const response = await get("/common/board/cate", params);
+      //console.log("notice response", response);
 
       if (!response.state) {
         resolve(null);
@@ -71,16 +71,16 @@ export default function useBoard() {
       }
 
       const params = {
-        board_id: newsIdx.value,
+        cate_id: newsIdx.value,
       };
 
       if (idx) {
         params.offset = idx;
       }
 
-      console.log("news params", params);
-      const response = await get("/common/board", params);
-      console.log("news response", response);
+      //console.log("news params", params);
+      const response = await get("/common/board/cate", params);
+      //console.log("news response", response);
 
       if (!response.state) {
         return;
@@ -116,12 +116,27 @@ export default function useBoard() {
     });
   };
 
+  const fetchBanners = () => {
+    return new Promise(async (resolve, reject) => {
+      const result = await get("/common/banner");
+
+      if (result.state) {
+        result.data.forEach((d) => {
+          d.filePath = JSON.parse(d.filePath.replace("”", '"'));
+        });
+
+        resolve(result.data);
+      }
+    });
+  };
+
   return {
     category,
     fetchCategory,
     fetchNotices,
     fetchNews,
     fetchArticle,
+    fetchBanners,
     writeBoard,
     addQuestion,
   };

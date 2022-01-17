@@ -24,7 +24,9 @@
           bg-gray-200
         "
       >
-        <div class="flex-center flex-col w-1/2 sm:w-1/3 mr-8 mb-4 md:mb-0">
+        <div
+          class="flex-center flex-col w-1/2 sm:w-1/3 mr-0 md:mr-8 mb-4 md:mb-0"
+        >
           <img
             class="
               sm:w-80
@@ -59,22 +61,22 @@
             >
           </fieldset>
         </div>
-        <div class="flex flex-col flex-grow">
+        <div class="flex flex-col flex-grow w-full">
           <dynamic-input
             class="mb-2"
             :data="nameInput"
             :disabled="true"
             @update="nameInput.onUpdate"
           />
-          <div class="flex mb-2">
+          <div class="flex flex-col sm:flex-row mb-2">
             <dynamic-input
-              class="w-2/3 mr-2"
+              class="sm:w-2/3 mb-2 sm:mb-0 sm:mr-2"
               :data="idInput"
               :disabled="true"
               @update="idInput.onUpdate"
             />
             <dynamic-input
-              class="w-1/3"
+              class="sm:w-1/3"
               :data="yearInput"
               :disabled="true"
               @update="yearInput.onUpdate"
@@ -85,28 +87,33 @@
             :data="majorInput"
             :disabled="true"
             @update="majorInput.onUpdate"
+            @enter="enterPressed"
           />
-          <div class="flex mb-2">
+          <div class="flex flex-col md:flex-row w-full mb-2">
             <dynamic-input
-              class="w-1/2 mr-2"
+              class="mb-2 w-full md:mb-0 md:mr-2"
               :data="phoneInput"
               @update="phoneInput.onUpdate"
+              @enter="enterPressed"
             />
             <dynamic-input
-              class="w-1/2"
+              class="w-full"
               :data="emailInput"
               @update="emailInput.onUpdate"
+              @enter="enterPressed"
             />
           </div>
           <dynamic-input
             class="mb-2"
             :data="clubInput"
             @update="clubInput.onUpdate"
+            @enter="enterPressed"
           />
           <dynamic-input
             :isTextArea="true"
             :data="infoInput"
             @update="infoInput.onUpdate"
+            @enter="enterPressed"
           />
         </div>
       </div>
@@ -115,6 +122,7 @@
         :data="passwordInput"
         :inputType="'password'"
         @update="passwordInput.onUpdate"
+        @enter="enterPressed"
       />
       <button
         class="w-full py-4 mt-4 mb-4 rounded-xl bg-primary text-white"
@@ -208,6 +216,15 @@ export default {
       },
     });
 
+    const enterPressed = () => {
+      if (!passworded.value) {
+        alert("비밀번호를 다시 한번 입력해주세요!");
+        return;
+      }
+
+      submit();
+    };
+
     const submit = async () => {
       const params = {
         phon: phoneInput.value.value,
@@ -221,7 +238,7 @@ export default {
         params.fileArray = profileImageFiles;
       }
 
-      console.log(params);
+      //console.log(params);
 
       const result = await updateProfile(params);
 

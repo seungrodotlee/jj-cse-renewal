@@ -1,8 +1,18 @@
 <template>
   <div class="home w-full h-full">
-    <section class="main-carousel mb-4">
-      <img class="w-full object-cover" :src="currentCarousel" />
-    </section>
+    <carousel v-if="banners" class="banner-carousel w-full" :wrap-around="true">
+      <slide v-for="b in banners" :key="b.id">
+        <a class="flex-center w-full" :href="b.link">
+          <img
+            class="w-full object-cover"
+            :src="`https://jj-cse.online${b.filePath[0]}`"
+          />
+        </a>
+      </slide>
+      <template #addons>
+        <navigation />
+      </template>
+    </carousel>
     <section class="container mx-auto mb-4 flex flex-col lg:flex-row">
       <div
         class="
@@ -21,7 +31,7 @@
         CSE Notice
       </div>
       <div class="flex-grow w-full flex flex-col sm:flex-row bg-primary p-1">
-        <div class="flex flex-col bg-white py-4 mr-1">
+        <div class="flex flex-col w-full bg-white py-4 mb-1 sm:mb-0 sm:mr-1">
           <p
             class="
               self-start
@@ -61,7 +71,7 @@
             </slide>
           </carousel>
         </div>
-        <div class="flex bg-white py-4">
+        <div class="flex flex-col w-full bg-white py-4">
           <p
             class="
               self-start
@@ -69,13 +79,37 @@
               mb-4
               px-4
               py-2
-              rounded-2xl
+              rounded-lg
               bg-gray-500
               text-white
             "
           >
-            새 소식
+            새소식
           </p>
+          <carousel v-if="notices" :autoplay="2500" :wrap-around="true">
+            <slide
+              v-for="(n, i) in news"
+              :key="i"
+              class="flex flex-col items-start px-6 text-left"
+            >
+              <p class="text-xl font-bold">{{ n.title }}</p>
+              <div class="py-2">
+                <text-box :line="3" :content="n.content" />
+              </div>
+              <div class="w-full flex justify-between">
+                <p class="text-gray-600">{{ n.created_at }}</p>
+                <router-link
+                  :to="{
+                    name: 'Article',
+                    params: { board: 'notices', idx: n.id },
+                  }"
+                  class="text-sm px-2 py-1 text-white bg-primary rounded-md"
+                >
+                  더보기
+                </router-link>
+              </div>
+            </slide>
+          </carousel>
         </div>
       </div>
     </section>
@@ -137,14 +171,19 @@
       <div class="container mx-auto py-8">
         <p class="text-4xl font-bold mb-8">익명 건의사항</p>
         <div class="flex flex-col">
-          <div class="flex w-full mb-4">
+          <div class="flex flex-col sm:flex-row">
             <dynamic-input
-              class="flex-grow mr-4"
+              class="mb-4"
               :data="titleInput"
               @update="titleInput.onUpdate"
             />
-            <dynamic-input :data="yearInput" @update="yearInput.onUpdate" />
+            <dynamic-input
+              class="mb-4"
+              :data="yearInput"
+              @update="yearInput.onUpdate"
+            />
           </div>
+
           <div class="flex flex-col bg-white rounded-xl">
             <dynamic-input
               :data="contentInput"
@@ -204,8 +243,15 @@ export default {
     const { logined } = useAuth();
     const { generate } = useInput();
     const { eventList, fetchEventList } = useEvent();
-    const { fetchCategory, fetchNotices, fetchNews, addQuestion } = useBoard();
+    const {
+      fetchBanners,
+      fetchCategory,
+      fetchNotices,
+      fetchNews,
+      addQuestion,
+    } = useBoard();
 
+    const banners = ref(null);
     const carouselCurrentIdx = ref(0);
     const carouselImages = ref([
       {
@@ -298,16 +344,21 @@ export default {
     };
 
     onMounted(async () => {
+      banners.value = await fetchBanners();
+      //console.log(banners.value);
       await fetchCategory();
 
       let result = await fetchNotices();
-      console.log("notice", result);
+      //console.log("notice", result);
       if (result) {
         notices.value = result[0].child;
       }
 
       result = await fetchNews();
-      console.log("news", result);
+      //console.log("news", result);
+      if (result) {
+        news.value = result[0].child;
+      }
 
       if (eventList.value) {
         setCarouselCellSize();
@@ -321,11 +372,13 @@ export default {
     });
 
     return {
+      banners,
       showEventCarousel,
       carouselImageShow,
       carouselImages,
       currentCarousel,
       notices,
+      news,
       eventList,
       titleInput,
       yearInput,
@@ -335,9 +388,19 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .main-carousel {
   @apply flex justify-center items-center overflow-hidden;
   height: 500px;
+}
+
+.banner-carousel .carousel__prev {
+  left: 2rem;
+  transform: translate(0, -50%);
+}
+
+.banner-carousel .carousel__next {
+  right: 2rem;
+  transform: translate(0, -50%);
 }
 </style>

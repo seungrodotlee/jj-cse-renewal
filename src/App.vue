@@ -28,7 +28,7 @@ export default {
       const result = await login();
 
       if (!result.state) {
-        console.log(result);
+        //console.log(result);
       }
     });
   },
