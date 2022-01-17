@@ -2,13 +2,13 @@
   <div class="home w-full h-full">
     <carousel
       v-if="banners"
-      class="banner-carousel w-full mb-4"
+      class="banner-carousel container mx-auto mb-4 overflow-hidden"
       :wrap-around="true"
     >
-      <slide v-for="b in banners" :key="b.id">
-        <a class="flex-center w-full" :href="b.link">
+      <slide v-for="b in banners" :key="b.id" style="height: 600px">
+        <a class="flex-center w-full h-full" :href="b.link">
           <img
-            class="w-full object-cover"
+            class="w-full h-full object-contain"
             :src="`https://jj-cse.online${b.filePath[0]}`"
           />
         </a>
@@ -120,7 +120,9 @@
     <section
       class="px-4 sm:px-0 slider-section container mx-auto mb-4"
       :class="
-        displayedEventList && displayedEventList.length > 1 ? 'w-full' : 'w-2/3'
+        displayedEventList && displayedEventList.length > 1
+          ? 'w-full'
+          : 'w-full md:w-2/3'
       "
     >
       <carousel
