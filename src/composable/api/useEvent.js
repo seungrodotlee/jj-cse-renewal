@@ -19,11 +19,15 @@ export default function useEvent() {
   };
 
   const getEventStatus = (data) => {
+    console.log(data);
     const current = new Date();
-    const periodStart = new Date(data.periodSDate);
-    const periodEnd = new Date(data.periodEDate);
+    let periodStart, periodEnd, diff;
 
-    const diff = periodEnd.getTime() - current.getTime();
+    if (data.periodEDate) {
+      periodStart = new Date(data.periodSDate.replace(" ", "T"));
+      periodEnd = new Date(data.periodEDate.replace(" ", "T"));
+      diff = periodEnd.getTime() - current.getTime();
+    }
 
     let status = "";
     let color = "";

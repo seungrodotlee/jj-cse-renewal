@@ -113,7 +113,12 @@
         </div>
       </div>
     </section>
-    <section class="px-4 sm:px-0 slider-section container mx-auto mb-4">
+    <section
+      class="px-4 sm:px-0 slider-section container mx-auto mb-4"
+      :class="
+        displayedEventList && displayedEventList.length > 1 ? 'w-full' : 'w-2/3'
+      "
+    >
       <carousel
         v-if="showEventCarousel"
         :items-to-show="carouselImageShow"
@@ -122,9 +127,9 @@
         class="w-full text-left"
       >
         <slide
-          v-for="(e, i) in eventList"
+          v-for="(e, i) in displayedEventList"
           :key="i"
-          :class="i < eventList.length - 1 ? 'lg:pr-4' : ''"
+          :class="[i < displayedEventList.length - 1 ? 'lg:pr-4' : '']"
         >
           <div
             class="flex flex-col h-full w-full px-4 py-4 bg-gray-200 rounded-xl"
@@ -252,37 +257,14 @@ export default {
     } = useBoard();
 
     const banners = ref(null);
-    const carouselCurrentIdx = ref(0);
-    const carouselImages = ref([
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-      },
-      {
-        src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-      },
-    ]);
 
-    const currentCarousel = computed(() => {
-      return carouselImages.value[carouselCurrentIdx.value].src;
+    const displayedEventList = computed(() => {
+      if (!eventList.value) return;
+
+      const list = eventList.value.filter((e) => e.mainFl === 1);
+
+      return list;
     });
-
-    onMounted(() => {
-      setInterval(() => {
-        if (carouselCurrentIdx.value + 1 >= carouselImages.value.length) {
-          carouselCurrentIdx.value = 0;
-          return;
-        }
-
-        carouselCurrentIdx.value++;
-      }, 2500);
-    });
-
     const showEventCarousel = ref(false);
     const carouselImageShow = ref(null);
 
@@ -294,7 +276,7 @@ export default {
     };
 
     watch(eventList, (to) => {
-      setCarouselCellSize(to);
+      setCarouselCellSize(displayedEventList.value);
     });
 
     const notices = ref(null);
@@ -373,13 +355,11 @@ export default {
 
     return {
       banners,
-      showEventCarousel,
       carouselImageShow,
-      carouselImages,
-      currentCarousel,
+      displayedEventList,
+      showEventCarousel,
       notices,
       news,
-      eventList,
       titleInput,
       yearInput,
       contentInput,
