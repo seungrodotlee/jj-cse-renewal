@@ -53,7 +53,9 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+
 import { MenuIcon, XIcon } from "@heroicons/vue/outline";
 
 import useAuth from "@/composable/api/useAuth";
@@ -64,9 +66,14 @@ export default {
     XIcon,
   },
   setup() {
+    const route = useRoute();
     const { logined, logout } = useAuth();
 
     const showMenus = ref(false);
+
+    watch(route, () => {
+      showMenus.value = false;
+    });
 
     return {
       logined,
@@ -89,5 +96,9 @@ export default {
   &:last-child {
     @apply mr-0;
   }
+}
+
+.router-link-active {
+  @apply text-primary pointer-events-none;
 }
 </style>

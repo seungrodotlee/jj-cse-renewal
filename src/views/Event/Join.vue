@@ -57,33 +57,40 @@
       기본정보
     </p>
     <div
-      class="grid grid-cols-4 gap-4 pb-4 px-4 sm:px-0 border-b border-gray-300"
+      class="
+        flex flex-col
+        md:grid md:grid-cols-4 md:gap-4
+        pb-4
+        px-4
+        sm:px-0
+        border-b border-gray-300
+      "
     >
       <dynamic-input
-        class="col-start-1 col-end-3"
+        class="col-start-1 col-end-3 mb-4 md:mb-0"
         :data="nameInput"
         :disabled="true"
         @update="nameInput.onUpdate"
       />
       <dynamic-input
-        class="col-start-3 col-end-4"
+        class="col-start-3 col-end-4 mb-4 md:mb-0"
         :data="idInput"
         :disabled="true"
         @update="idInput.onUpdate"
       />
       <dynamic-input
-        class="col-start-4 col-end-5"
+        class="col-start-4 col-end-5 mb-4 md:mb-0"
         :data="yearInput"
         :disabled="true"
         @update="yearInput.onUpdate"
       />
       <dynamic-input
-        class="col-start-1 col-end-3"
+        class="col-start-1 col-end-3 mb-4 md:mb-0"
         :data="emailInput"
         @update="emailInput.onUpdate"
       />
       <dynamic-input
-        class="col-start-3 col-end-5"
+        class="col-start-3 col-end-5 mb-4 md:mb-0"
         :data="phoneInput"
         @update="phoneInput.onUpdate"
       />

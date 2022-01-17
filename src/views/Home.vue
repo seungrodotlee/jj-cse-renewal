@@ -1,6 +1,10 @@
 <template>
   <div class="home w-full h-full">
-    <carousel v-if="banners" class="banner-carousel w-full" :wrap-around="true">
+    <carousel
+      v-if="banners"
+      class="banner-carousel w-full mb-4"
+      :wrap-around="true"
+    >
       <slide v-for="b in banners" :key="b.id">
         <a class="flex-center w-full" :href="b.link">
           <img
