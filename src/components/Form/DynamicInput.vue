@@ -122,7 +122,7 @@ export default {
     const inputElement = ref(null);
     const isFocused = ref(false);
     const isErrored = ref(false);
-    const valueBind = ref(initial.value || value.value);
+    const valueBind = ref(initial.value || value.value || "");
     const inputDynamicStyles = computed(() => {
       let border = isFocused.value ? "border-primary" : "border-gray-300";
       border = errored.value ? "border-red-600" : border;

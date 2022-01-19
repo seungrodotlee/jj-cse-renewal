@@ -472,6 +472,8 @@ export default {
         }
       }
 
+      console.log(result);
+
       return result;
     });
 
@@ -626,7 +628,10 @@ export default {
         changedByLoadedData = true;
         content.value = joined.content;
 
-        return JSON.parse(filePath);
+        console.log(filePath);
+
+        if (!filePath) return;
+        return JSON.parse(filePath.replace("”", '"'));
       }
     };
 
