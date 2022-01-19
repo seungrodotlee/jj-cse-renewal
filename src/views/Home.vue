@@ -184,12 +184,12 @@
         <div class="flex flex-col">
           <div class="flex flex-col sm:flex-row">
             <dynamic-input
-              class="mb-4"
+              class="mb-4 w-full sm:mb-0 sm:mr-4"
               :data="titleInput"
               @update="titleInput.onUpdate"
             />
             <dynamic-input
-              class="mb-4"
+              class="mb-4 w-full"
               :data="yearInput"
               @update="yearInput.onUpdate"
             />
@@ -329,6 +329,7 @@ export default {
       const result = await addQuestion(params);
 
       alert(result.message);
+      location.reload();
     };
 
     onMounted(async () => {
