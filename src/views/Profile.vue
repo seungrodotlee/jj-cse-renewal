@@ -159,6 +159,14 @@ export default {
     const profileImageChanged = (e) => {
       const file = e.target.files[0];
       profileImageFiles = e.target.files;
+      const splited = file.name.split(".");
+      const ext = splited[splited.length - 1];
+      const extFilter = /jpg|jpeg|png|gif|bmp/;
+
+      if (!extFilter.test(ext)) {
+        alert("이미지 파일만 업로드 할 수 있습니다!");
+        return;
+      }
 
       const reader = new FileReader();
 
@@ -288,6 +296,7 @@ export default {
       clubInput,
       infoInput,
       passwordInput,
+      enterPressed,
       submit,
     };
   },
