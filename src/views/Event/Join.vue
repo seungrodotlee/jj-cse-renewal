@@ -456,6 +456,7 @@ export default {
     const { generate } = useInput();
 
     const eventData = computed(() => {
+      console.log(eventList.value);
       if (!eventList.value) return null;
 
       const result = eventList.value.find(
@@ -616,6 +617,7 @@ export default {
       emailInput.value.value = logined.value.email || "";
       phoneInput.value.value = logined.value.phon || "";
 
+      console.log("joined", joined);
       if (joined) {
         const { name, year, email, phone, etc, filePath } = joined;
 

@@ -64,10 +64,12 @@ export default function useEvent() {
     return new Promise(async (resolve, reject) => {
       try {
         let result = await post("/common/event/modify", params);
-
-        result = result === "" ? null : result;
-
-        resolve(result);
+        console.log("joined result", result);
+        if (result.state) {
+          resolve(result.data);
+        } else {
+          resolve(null);
+        }
       } catch (e) {
         console.error(e.stack);
       }
@@ -76,6 +78,7 @@ export default function useEvent() {
 
   const fetchEventList = async () => {
     const result = await get("/common/event");
+    console.log(result);
 
     if (result.error) {
       return;
