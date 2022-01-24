@@ -11,11 +11,59 @@
           {{ c.cateNm }}
         </option>
       </select>
+      <select
+        id="category-selector"
+        class="p-2 rounded-lg border border-gray-300 mb-4"
+        v-model="selectedSubCategory"
+      >
+        <option disabled>세부 카테고리를 선택해주세요</option>
+        <option v-for="sc in subCategory" :key="sc.id" :value="sc.id">
+          {{ sc.cateNm }}
+        </option>
+      </select>
       <dynamic-input
         class="mb-4"
         :data="titleInput"
         @update="titleInput.onUpdate"
       />
+      <!-- host, subText, eventFl, mainFl, peroidFl, periodSDate, periodEDate -->
+      <div
+        class="w-full grid grid-cols-4 gap-4 mb-4"
+        v-if="selectedCategory === 2"
+      >
+        <dynamic-input :data="hostInput" @update="hostInput.onUpdate" />
+        <dynamic-input :data="subTextInput" @update="subTextInput.onUpdate" />
+        <dynamic-input :data="eventFlInput" @update="eventFlInput.onUpdate" />
+        <dynamic-input :data="mainFlInput" @update="mainFlInput.onUpdate" />
+        <dynamic-input :data="periodFlInput" @update="periodFlInput.onUpdate" />
+        <div
+          class="
+            flex
+            justify-center
+            px-8
+            flex-col
+            border border-gray-300
+            rounded-2xl
+          "
+        >
+          <label for="s-date">시작일</label>
+          <input id="s-date" type="date" v-model="periodSDate" />
+        </div>
+        <div
+          class="
+            flex
+            justify-center
+            px-8
+            flex-col
+            border border-gray-300
+            rounded-2xl
+          "
+        >
+          <label for="e-date">종료일</label>
+          <input id="e-date" type="date" v-model="periodEDate" />
+        </div>
+      </div>
+
       <quill-editor
         class="w-full"
         style="min-height: 300px"
@@ -83,7 +131,12 @@
           >
         </div>
       </fieldset>
-      <button @click="submit">작성</button>
+      <button
+        class="flex-center w-full p-4 mt-4 rounded-lg bg-primary text-white"
+        @click="submit"
+      >
+        작성
+      </button>
     </div>
   </div>
 </template>
@@ -116,28 +169,59 @@ export default {
 
     const category = ref([]);
     const selectedCategory = ref("카테고리를 선택해주세요");
+    const subCategory = ref([]);
+    const selectedSubCategory = ref("세부 카테고리를 선택해주세요");
 
     const titleInput = generate({
       placeholder: "제목을 입력해주세요",
     });
 
+    const hostInput = generate({
+      placeholder: "호스트를 입력해주세요",
+    });
+
+    const subTextInput = generate({
+      placeholder: "서브 텍스트를 입력해주세요",
+    });
+
+    const eventFlInput = generate({
+      placeholder: "'eventFl' 값을 입력해주세요",
+    });
+
+    const mainFlInput = generate({
+      placeholder: "'mainFl' 값을 입력해주세요",
+    });
+
+    const periodFlInput = generate({
+      placeholder: "'periodFl' 값을 입력해주세요",
+    });
+
+    const periodSDate = ref(null);
+    const periodEDate = ref(null);
+
+    let cateList;
     const getCatogoryList = async () => {
       const result = await fetchCategory(true);
-      console.log(result);
+      cateList = result;
 
       //console.log(result);
 
       result.forEach((r) => {
         category.value.push(r);
-        if (r.child.length > 0) {
-          r.child.forEach((c) => {
-            category.value.push(c);
-          });
-        }
       });
 
       //console.log(category.value);
     };
+
+    watch(selectedCategory, (to) => {
+      const cate = cateList.find((c) => c.id === to);
+      subCategory.value = [];
+      if (cate.child.length > 0) {
+        cate.child.forEach((c) => {
+          subCategory.value.push(c);
+        });
+      }
+    });
 
     onMounted(() => {
       if (logined.value) {
@@ -164,8 +248,7 @@ export default {
     };
 
     const submit = async () => {
-      const params = {
-        board_id: selectedCategory.value,
+      let params = {
         title: titleInput.value.value,
         content: content.value,
       };
@@ -174,7 +257,36 @@ export default {
         params.fileArray = fileList.value;
       }
 
+      if (selectedCategory.value === 2) {
+        params = {
+          ...params,
+          ...{
+            cate_id: selectedCategory.value,
+            host: hostInput.value.value,
+            subText: subTextInput.value.value,
+            eventFl: eventFlInput.value.value,
+            mainFlInput: mainFlInput.value.value,
+            periodFl: periodFlInput.value.value,
+          },
+        };
+
+        if (periodFlInput.value.value === 1) {
+          params = {
+            ...params,
+            ...{
+              periodSDate: periodSDate.value,
+              periodSDate: periodSDate.value,
+            },
+          };
+        }
+      } else {
+        params.cate_id = selectedSubCategory.value;
+      }
+
+      console.log(params);
+
       const result = await writeBoard(params);
+      console.log(result);
 
       //console.log(result);
 
@@ -187,7 +299,16 @@ export default {
     return {
       category,
       selectedCategory,
+      subCategory,
+      selectedSubCategory,
       titleInput,
+      hostInput,
+      subTextInput,
+      eventFlInput,
+      mainFlInput,
+      periodFlInput,
+      periodSDate,
+      periodEDate,
       content,
       files,
       fileChanged,

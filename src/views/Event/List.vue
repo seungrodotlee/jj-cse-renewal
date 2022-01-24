@@ -16,7 +16,9 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-4 sm:px-0">
       <div v-for="e in eventList" :key="e.id" class="flex flex-col">
         <img
+          ref="thumbnail"
           class="flex-grow object-cover rounded-lg"
+          :style="thumbnailStyle"
           :src="
             e.images ? e.images[0] : 'https://via.placeholder.com/1000x1000'
           "
@@ -70,8 +72,20 @@ export default {
     const { eventList, fetchEventList } = useEvent();
     const { logined } = useAuth();
 
-    onMounted(() => {
-      fetchEventList();
+    const thumbnail = ref(null);
+    const thumbnailStyle = ref(null);
+
+    onMounted(async () => {
+      await fetchEventList();
+      thumbnailStyle.value = {
+        height: thumbnail.value.clientWidth + "px",
+      };
+
+      window.addEventListener("resize", () => {
+        thumbnailStyle.value = {
+          height: thumbnail.value.clientWidth + "px",
+        };
+      });
     });
 
     watch(logined, () => {
@@ -80,6 +94,8 @@ export default {
 
     return {
       eventList,
+      thumbnail,
+      thumbnailStyle,
     };
   },
 };
