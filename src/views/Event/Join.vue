@@ -1,4 +1,19 @@
 <template>
+  <div class="w-full h-full flex-center flex-col" v-if="!logined">
+    <div class="flex flex-col">
+      <p class="mb-4">이벤트 신청을 위해서는 로그인이 필요합니다.</p>
+      <router-link
+        class="flex-center py-2 rounded-lg bg-primary text-white mb-4"
+        :to="{ name: 'Home' }"
+        >메인으로</router-link
+      >
+      <router-link
+        class="flex-center py-2 rounded-lg bg-primary text-white"
+        :to="{ name: 'Login' }"
+        >로그인</router-link
+      >
+    </div>
+  </div>
   <div v-if="eventData" class="container mx-auto flex flex-col">
     <div class="flex items-center mt-4 border-b border-gray-300">
       <p class="text-3xl font-black py-4 pb-5 px-4 sm:px-0">
@@ -660,6 +675,7 @@ export default {
     });
 
     return {
+      logined,
       changed,
       eventData,
       nameInput,
