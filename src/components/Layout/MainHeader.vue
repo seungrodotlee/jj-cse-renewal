@@ -16,38 +16,105 @@
         <router-link v-if="!logined" :to="{ name: 'Login' }"
           >로그인</router-link
         >
-        <button v-else @click="logout">로그아웃</button>
-        <router-link v-if="logined" :to="{ name: 'Profile' }"
-          >프로필</router-link
+        <div
+          v-else
+          class="flex-center relative"
+          @mouseenter="showDropdown = true"
+          @mouseleave="showDropdown = false"
         >
+          <div>
+            <emoji-happy-icon
+              v-if="!logined.imagePath && !logined.imagePath[0]"
+              class="h-8 w-8"
+            />
+            <img
+              v-else
+              class="h-8 w-8 rounded-full overflow-hidden"
+              :src="'https://jj-cse.online' + logined.imagePath[0]"
+            />
+          </div>
+          <div
+            v-if="showDropdown"
+            class="
+              flex flex-col
+              absolute
+              px-4
+              py-2
+              top-full
+              right-0
+              text-right
+              transform
+              translate-x-4
+              -translate-y-4
+              border border-gray-100
+              rounded-lg
+              shadow-lg
+              bg-white
+              whitespace-nowrap
+            "
+          >
+            <router-link
+              class="
+                p-1
+                border-b border-gray-300
+                text-gray-500
+                hover:text-black
+                transition-colors
+              "
+              :to="{ name: 'Profile' }"
+              >프로필</router-link
+            >
+            <button
+              class="p-1 text-gray-500 hover:text-black transition-colors"
+              @click="logout"
+            >
+              로그아웃
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div
       v-if="showMenus"
       class="
-        flex-center flex-col
         text-xl
         fixed
         top-0
         left-0
         w-full
         h-full
-        bg-white
+        pl-24
+        bg-black bg-opacity-50
       "
     >
-      <router-link class="mb-2" :to="{ name: 'Notice', params: { page: 1 } }"
-        >공지사항</router-link
+      <div
+        class="
+          flex flex-col
+          w-full
+          h-full
+          px-2
+          pr-6
+          py-6
+          bg-white
+          divide-y divide-gray-300
+        "
       >
-      <router-link class="mb-2" :to="{ name: 'EventList' }"
-        >학과 이벤트</router-link
-      >
-      <!-- <router-link to="/">커뮤니티</router-link> -->
-      <router-link class="mb-2" v-if="!logined" :to="{ name: 'Login' }"
-        >로그인</router-link
-      >
-      <button v-else class="mb-2" @click="logout">로그아웃</button>
-      <router-link v-if="logined" :to="{ name: 'Profile' }">프로필</router-link>
-      <x-icon class="absolute top-4 right-4 h-8" @click="showMenus = false" />
+        <x-icon class="self-end h-8 mb-2" @click="showMenus = false" />
+        <router-link class="p-2" :to="{ name: 'Notice', params: { page: 1 } }"
+          >공지사항</router-link
+        >
+        <router-link class="p-2" :to="{ name: 'EventList' }"
+          >학과 이벤트</router-link
+        >
+        <!-- <router-link to="/">커뮤니티</router-link> -->
+        <router-link v-if="logined" :to="{ name: 'Profile' }" class="p-2"
+          >프로필</router-link
+        >
+        <router-link class="p-2" v-if="!logined" :to="{ name: 'Login' }"
+          >로그인</router-link
+        >
+        <button v-else class="text-left p-2" @click="logout">로그아웃</button>
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +123,7 @@
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-import { MenuIcon, XIcon } from "@heroicons/vue/outline";
+import { MenuIcon, XIcon, EmojiHappyIcon } from "@heroicons/vue/outline";
 
 import useAuth from "@/composable/api/useAuth";
 
@@ -64,11 +131,13 @@ export default {
   components: {
     MenuIcon,
     XIcon,
+    EmojiHappyIcon,
   },
   setup() {
     const route = useRoute();
     const { logined, logout } = useAuth();
 
+    const showDropdown = ref(false);
     const showMenus = ref(false);
 
     watch(route, () => {
@@ -78,6 +147,7 @@ export default {
     return {
       logined,
       logout,
+      showDropdown,
       showMenus,
     };
   },

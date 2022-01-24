@@ -19,7 +19,6 @@ export default function useEvent() {
   };
 
   const getEventStatus = (data) => {
-    console.log(data);
     const current = new Date();
     let periodStart, periodEnd, diff;
 
@@ -64,7 +63,7 @@ export default function useEvent() {
     return new Promise(async (resolve, reject) => {
       try {
         let result = await post("/common/event/modify", params);
-        console.log("joined result", result);
+
         if (result.state) {
           resolve(result.data);
         } else {
@@ -78,7 +77,6 @@ export default function useEvent() {
 
   const fetchEventList = async () => {
     const result = await get("/common/event");
-    console.log(result);
 
     if (result.error) {
       return;

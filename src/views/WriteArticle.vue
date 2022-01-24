@@ -1,8 +1,11 @@
 <template>
-  <div class="relative container mx-auto">
+  <div class="relative container mx-auto py-8">
     <div class="flex flex-col items-start">
-      <label for="category-selector">카테고리</label>
-      <select id="category-selector" class="mb-4" v-model="selectedCategory">
+      <select
+        id="category-selector"
+        class="p-2 rounded-lg border border-gray-300 mb-4"
+        v-model="selectedCategory"
+      >
         <option disabled>카테고리를 선택해주세요</option>
         <option v-for="c in category" :key="c.id" :value="c.id">
           {{ c.cateNm }}
@@ -120,6 +123,7 @@ export default {
 
     const getCatogoryList = async () => {
       const result = await fetchCategory(true);
+      console.log(result);
 
       //console.log(result);
 
