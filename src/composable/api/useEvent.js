@@ -35,7 +35,7 @@ export default function useEvent() {
     if (!data.periodSDate || current < periodStart) {
       status = "공지중";
       color = "gray";
-    } else if (current > periodStart || current < periodEnd) {
+    } else if (current > periodStart && current < periodEnd) {
       status = "진행중";
       color = "blue";
       enabled = true;
