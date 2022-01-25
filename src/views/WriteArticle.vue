@@ -275,7 +275,7 @@ export default {
             ...params,
             ...{
               periodSDate: periodSDate.value,
-              periodEDate: periodSDate.value,
+              periodEDate: periodEDate.value,
             },
           };
         }
