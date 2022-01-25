@@ -182,7 +182,7 @@
                 m-1
               "
             >
-              <p>등록된 이미지 {{ i }}</p>
+              <p>등록된 파일 {{ i }}</p>
               <div class="flex">
                 <a
                   :href="`https://jj-cse.online${ef}`"
