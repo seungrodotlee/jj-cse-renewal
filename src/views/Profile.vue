@@ -163,7 +163,7 @@ export default {
       const ext = splited[splited.length - 1];
       const extFilter = /jpg|jpeg|png|gif|bmp/;
 
-      if (!extFilter.test(ext)) {
+      if (!extFilter.test(ext.toLowerCase())) {
         alert("이미지 파일만 업로드 할 수 있습니다!");
         return;
       }
