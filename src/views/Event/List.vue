@@ -23,16 +23,16 @@
             e.images ? e.images[0] : 'https://via.placeholder.com/1000x1000'
           "
         />
-        <div class="flex items-center text-sm mt-4 mb-2">
+        <div class="flex flex-wrap items-center text-sm mt-4 whitespace-nowrap">
           <p
-            class="px-2 py-1 mr-2 rounded-md"
+            class="px-2 py-1 mr-2 mb-2 rounded-md"
             :class="`bg-blue-200 text-blue-600`"
           >
             {{ e.host }}
           </p>
           <p
             v-html="e.status"
-            class="px-2 py-1 mr-2 rounded-md"
+            class="px-2 py-1 mr-2 mb-2 rounded-md"
             :class="`bg-${e.color}-200 text-${e.color}-600`"
           ></p>
           <p

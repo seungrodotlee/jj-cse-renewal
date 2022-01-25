@@ -21,9 +21,7 @@
         <p>{{ data.views }} views</p>
       </div>
     </div>
-    <article class="py-4 px-4 sm:px-0">
-      {{ data.content }}
-    </article>
+    <article class="py-4 px-4 sm:px-0" v-html="data.content"></article>
   </div>
 </template>
 
