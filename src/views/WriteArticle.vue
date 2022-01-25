@@ -270,12 +270,12 @@ export default {
           },
         };
 
-        if (periodFlInput.value.value === 1) {
+        if (parseInt(periodFlInput.value.value) === 1) {
           params = {
             ...params,
             ...{
               periodSDate: periodSDate.value,
-              periodSDate: periodSDate.value,
+              periodEDate: periodSDate.value,
             },
           };
         }
