@@ -37,7 +37,7 @@
           ></p>
           <p
             v-if="e.timeLeft"
-            class="px-2 py-1 rounded-md bg-gray-200 text-gray-600"
+            class="px-2 py-1 rounded-md mb-2 bg-gray-200 text-gray-600"
           >
             D-{{ e.timeLeft }}
           </p>

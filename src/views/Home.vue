@@ -17,7 +17,7 @@
         <navigation />
       </template>
     </carousel>
-    <section class="container mx-auto mb-4 flex flex-col lg:flex-row">
+    <section class="container mx-auto mb-4 flex flex-col">
       <div
         class="
           flex
@@ -34,8 +34,8 @@
       >
         CSE Notice
       </div>
-      <div class="flex-grow w-full flex flex-col sm:flex-row bg-primary p-1">
-        <div class="flex flex-col w-full bg-white py-4 mb-1 sm:mb-0 sm:mr-1">
+      <div class="flex-grow w-full flex flex-col bg-primary p-1">
+        <div class="flex flex-col w-full bg-white py-4 mb-1">
           <p
             class="
               self-start
