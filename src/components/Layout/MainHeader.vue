@@ -23,10 +23,7 @@
           @mouseleave="showDropdown = false"
         >
           <div>
-            <emoji-happy-icon
-              v-if="!logined.imagePath && !logined.imagePath[0]"
-              class="h-8 w-8"
-            />
+            <emoji-happy-icon v-if="!logined.imagePath" class="h-8 w-8" />
             <img
               v-else
               class="h-8 w-8 rounded-full overflow-hidden"
