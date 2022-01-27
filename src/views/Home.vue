@@ -339,17 +339,14 @@ export default {
 
     onMounted(async () => {
       banners.value = await fetchBanners();
-      //console.log(banners.value);
       await fetchCategory();
 
       let result = await fetchNotices();
-      //console.log("notice", result);
       if (result) {
         notices.value = result[0].child;
       }
 
       result = await fetchNews();
-      //console.log("news", result);
       if (result) {
         news.value = result[0].child;
       }
@@ -363,7 +360,6 @@ export default {
 
     watch(logined, async () => {
       await fetchEventList();
-      console.log(eventList.value);
     });
 
     return {

@@ -246,8 +246,6 @@ export default {
         params.fileArray = profileImageFiles;
       }
 
-      //console.log(params);
-
       const result = await updateProfile(params);
 
       if (result.state) {

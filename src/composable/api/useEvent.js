@@ -84,8 +84,6 @@ export default function useEvent() {
 
     const pack = result.data;
 
-    //console.log("event", pack);
-
     for (let i in pack) {
       const p = pack[i];
 

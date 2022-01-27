@@ -40,8 +40,6 @@ export default {
     const fetchData = async () => {
       const result = await fetchArticle(route.params.idx);
 
-      //console.log(result);
-
       data.value = result;
     };
 

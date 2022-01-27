@@ -182,8 +182,6 @@ export default {
         return;
       }
 
-      //console.log("login result", result);
-
       if (!result.state) {
         alert(result.error.message);
       } else {

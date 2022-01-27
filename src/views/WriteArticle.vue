@@ -204,13 +204,9 @@ export default {
       const result = await fetchCategory(true);
       cateList = result;
 
-      //console.log(result);
-
       result.forEach((r) => {
         category.value.push(r);
       });
-
-      //console.log(category.value);
     };
 
     watch(selectedCategory, (to) => {
@@ -232,8 +228,6 @@ export default {
     watch(logined, () => {
       getCatogoryList();
     });
-
-    //watch(selectedCategory, (to) => console.log(to));
 
     const content = ref("");
 
@@ -283,12 +277,7 @@ export default {
         params.cate_id = selectedSubCategory.value;
       }
 
-      console.log(params);
-
       const result = await writeBoard(params);
-      console.log(result);
-
-      //console.log(result);
 
       if (result.state) {
         alert("글을 성공적으로 작성하였습니다");

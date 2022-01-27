@@ -367,7 +367,6 @@ export default {
     const { generate } = useInput();
 
     const eventData = computed(() => {
-      console.log(eventList.value);
       if (!eventList.value) return null;
 
       const result = eventList.value.find(
@@ -383,8 +382,6 @@ export default {
           result.existFiles = existFiles;
         }
       }
-
-      console.log(result);
 
       return result;
     });
@@ -532,7 +529,6 @@ export default {
       emailInput.value.value = logined.value.email || "";
       phoneInput.value.value = logined.value.phon || "";
 
-      console.log("joined", joined);
       if (joined) {
         const { name, year, email, phone, etc, filePath } = joined;
 
@@ -544,8 +540,6 @@ export default {
         etcInput.value.value = etc;
         changedByLoadedData = true;
         content.value = joined.content;
-
-        console.log(filePath);
 
         if (!filePath) return;
         return JSON.parse(filePath.replace("”", '"'));
