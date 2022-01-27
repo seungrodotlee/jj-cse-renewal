@@ -166,7 +166,12 @@
               <p class="text-gray-600">{{ e.periodSDate }}</p>
               <router-link
                 :to="{ name: 'JoinEvent', params: { idx: e.id } }"
-                class="text-white bg-primary px-3 py-2 rounded-lg"
+                class="px-3 py-2 rounded-lg"
+                :class="
+                  e.status === '진행중'
+                    ? 'text-white bg-primary'
+                    : 'invisible disabled'
+                "
               >
                 {{ e.joined ? "내 신청정보" : "신청하기" }}
               </router-link>
@@ -356,8 +361,9 @@ export default {
       }
     });
 
-    watch(logined, () => {
-      fetchEventList();
+    watch(logined, async () => {
+      await fetchEventList();
+      console.log(eventList.value);
     });
 
     return {
