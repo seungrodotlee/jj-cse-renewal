@@ -254,7 +254,11 @@ export default {
         alert(result.message);
         location.reload();
       } else {
-        alert(result.error.message);
+        if (result.error.message) {
+          alert(result.error.message);
+        } else {
+          alert(result.error);
+        }
       }
     };
 

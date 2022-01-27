@@ -513,7 +513,11 @@ export default {
       if (result.state) {
         alert(`${eventData.value.joined ? "수정" : "신청"}을 완료하였습니다!`);
       } else {
-        alert(result.error);
+        if (result.error.message) {
+          alert(result.error.message);
+        } else {
+          alert(result.error);
+        }
       }
 
       router.push({ name: "EventList" });

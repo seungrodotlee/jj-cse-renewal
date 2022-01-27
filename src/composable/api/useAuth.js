@@ -82,7 +82,11 @@ export default function useAuth() {
       alert("안전하게 로그아웃하였습니다!");
       router.push({ name: "Home" });
     } else {
-      alert(result.error.message);
+      if (result.error.message) {
+        alert(result.error.message);
+      } else {
+        alert(result.error);
+      }
     }
   };
 

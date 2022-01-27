@@ -82,6 +82,8 @@ export default {
       };
 
       window.addEventListener("resize", () => {
+        if (!thumbnail.value) return;
+
         thumbnailStyle.value = {
           height: thumbnail.value.clientWidth + "px",
         };
